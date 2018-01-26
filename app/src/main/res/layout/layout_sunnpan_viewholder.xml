@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+        <TextView
+            android:text="珠江新城"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/apartmentName"
+            android:textSize="16dp"
+            android:textColor="#000" />
+
+        <TextView
+            android:text="50000 元/平米"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/price"
+            android:layout_alignParentRight="true"
+            android:textColor="#000"
+            android:textSize="14dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/left1"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="8dp">
+            <TextView
+                android:text="D1栋"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:textColor="#000"
+                android:id="@+id/dong"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+            <TextView
+                android:text="2301"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/ceng"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/right1">
+            <TextView
+                android:text="200"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="#000"
+                android:id="@+id/area"
+                android:textSize="14dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:ellipsize="end" />
+            <RelativeLayout
+                android:layout_width="16dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/dw">
+            <TextView
+                android:text="m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="14dp"
+                android:gravity="center_vertical" />
+            <TextView
+                android:text="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:textSize="8dp"
+                android:textColor="#000" />
+            </RelativeLayout>
+            </LinearLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/left2"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="8dp">
+            <TextView
+                android:text="刘德华"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:textColor="#000"
+                android:id="@+id/contact"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+            <TextView
+                android:text="香港地产"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/company"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+        </LinearLayout>
+        <TextView
+            android:text="1234567890123"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="#000"
+            android:id="@+id/phonenumber"
+            android:textSize="14dp"
+            android:singleLine="true"
+            android:ellipsize="end" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.zyt.dkjs.DKJS"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@color/navigationBar"
+        android:id="@+id/relativeLayout4" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="贷款计算"
+            android:id="@+id/textView28"
+            android:textSize="24dp"
+            android:textColor="#fff"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/backBtn"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"
+            android:layout_marginLeft="10dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="商业贷款"
+            android:id="@+id/sydk"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:background="#aaaaaa" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="公积金贷款"
+            android:id="@+id/gjjdk"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:background="#dddddd"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="组合贷款"
+            android:id="@+id/zhdk"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:background="#dddddd" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/fragmentContainer">
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.zyt.dkjs.fragment.SYDK"
+            android:id="@+id/sydkFragment"
+            android:layout_gravity="center" />
+
+        <fragment
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:name="com.zyt.dkjs.fragment.GJJDK"
+            android:id="@+id/gjjdkFragment"
+            android:layout_gravity="center" />
+
+        <fragment
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:name="com.zyt.dkjs.fragment.ZHDK"
+            android:id="@+id/zhdkFragment"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:background="#fff" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="计算"
+            android:id="@+id/caculateBtn"
+            android:layout_weight="1"
+            android:background="@color/bottomBar"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:layout_marginRight="1dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="重置"
+            android:id="@+id/resetBtn"
+            android:layout_weight="1"
+            android:alpha="1"
+            android:background="@color/bottomBar"
+            android:textSize="18dp"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+</LinearLayout>

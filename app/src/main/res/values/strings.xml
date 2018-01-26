@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">房秘书</string>
+
+
+    <!--url-->
+    <!--<string name="baseUrl">http://120.76.233.32:8500</string>-->
+    <string name="baseUrl">http://119.23.66.37:8501</string>
+
+    <string name="registerUrl">/server/user/initialization/Registered</string>
+    <string name="loginUrl">/server/user/initialization/Login</string>
+    <string name="loanTax">/server/loan/tax</string>
+    <!--sdk msg-->
+    <string name="SMSSDK_APPKEY">15df2b033ba58</string>
+    <string name="SMSSDK_SECREAT">ec216d80705dcf9b198039f59c101308</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@color/navigationBar"
+        android:id="@+id/relativeLayout10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="发布笋盘"
+            android:id="@+id/title"
+            android:textSize="24dp"
+            android:textColor="#fff"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/backBtn"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"
+            android:layout_marginLeft="10dp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f1f1f1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:divider="@drawable/divider"
+                android:orientation="vertical"
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:showDividers="middle">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  楼盘名称"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/apartmentName"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/input_apartmentName"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  房屋栋号"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/input_buildingNo"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  房屋楼层"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/intput_floor"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  房屋面积"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/input_area"
+                        android:singleLine="true"
+                        android:inputType="number|text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+
+                    <RelativeLayout
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="m"
+                            android:id="@+id/textView120"
+                            android:layout_centerInParent="true"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="2"
+                            android:id="@+id/textView125"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="10dp"
+                            android:textSize="12dp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text=" 平方单价"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/price"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/input_price"
+                        android:singleLine="true"
+                        android:inputType="number|text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="元"
+                        android:id="@+id/textView121"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:textSize="16dp"
+                        android:layout_marginRight="10dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:divider="@drawable/divider"
+                android:orientation="vertical"
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border"
+                android:showDividers="middle">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  联系人"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/input_contart"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  联系电话"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/tel"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/input_tel"
+                        android:singleLine="true"
+                        android:inputType="number|text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:text="  公司名称"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:textColor="#000"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/input_companyName"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:gravity="center"
+        android:background="@color/navigationBar"
+        android:textColor="#fff"
+        android:text="提交"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textSize="18dp"
+        android:id="@+id/submit" />
+</LinearLayout>
