@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/activityBg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -19,20 +23,20 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="笋盘共享"
             android:id="@+id/textView64"
-            android:textSize="24dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:layout_centerInParent="true" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="12dp"
+            android:layout_height="21dp"
             android:id="@+id/backBtn"
             android:layout_centerVertical="true"
             android:src="@drawable/back"
             android:layout_marginLeft="10dp" />
 
         <TextView
-            android:textSize="20dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:text="我的"
             android:layout_width="wrap_content"
@@ -42,48 +46,38 @@
             android:layout_marginRight="8dp"
             android:id="@+id/mySP" />
     </RelativeLayout>
-    <RelativeLayout
+    <LinearLayout
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="34dp"
+
         android:background="#fff">
+
+        <ImageView
+            android:layout_gravity="center|left"
+            android:layout_marginRight="12dp"
+            android:layout_marginLeft="8dp"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:src="@drawable/search" />
+
         <EditText
+            android:layout_gravity="center|left"
+            android:hint="查询"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/searchET"
             android:textSize="16dp"
             android:textColor="#000"
             android:background="@null"
-            android:paddingLeft="37dp" />
+             />
 
-        <RelativeLayout
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/mask" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:id="@+id/search_block" >
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/search" />
-
-                <TextView
-                    android:text="查询"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:layout_marginLeft="16dp"
-                    android:id="@+id/search_hint" />
-            </LinearLayout>
-        </RelativeLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
     <FrameLayout
         android:layout_weight="1"
         android:layout_width="match_parent"

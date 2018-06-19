@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.zyt.HttpUtil.Bean.LoanTaxBean;
 import com.zyt.R;
-import com.zyt.dkjs.DKJS;
+import com.zyt.dkjs.DKJSActivity;
 import com.zyt.dkjs.DKJSResult;
 import com.zyt.util.Util;
 
@@ -84,15 +84,22 @@ public class GJJDK extends Fragment {
                 pfdjLayout.setVisibility(View.GONE);
                 fwmjLayout.setVisibility(View.GONE);
                 dkjeLayout.setVisibility(View.VISIBLE);
-                adkedsBtn.setBackgroundColor(Color.parseColor("#dddddd"));
-                amjsBtn.setBackgroundColor(Color.parseColor("#f1f1f1"));
+                adkedsBtn.setBackgroundResource(R.drawable.btn_radio_sel);
+                adkedsBtn.setTextColor(Color.WHITE);
+
+                amjsBtn.setBackgroundResource(0);
+                amjsBtn.setTextColor(Color.BLACK);
                 break;
             case R.id.amjsBtn:
                 pfdjLayout.setVisibility(View.VISIBLE);
                 fwmjLayout.setVisibility(View.VISIBLE);
                 dkjeLayout.setVisibility(View.GONE);
-                adkedsBtn.setBackgroundColor(Color.parseColor("#f1f1f1"));
-                amjsBtn.setBackgroundColor(Color.parseColor("#dddddd"));
+
+                amjsBtn.setBackgroundResource(R.drawable.btn_radio_sel);
+                amjsBtn.setTextColor(Color.WHITE);
+
+                adkedsBtn.setBackgroundResource(0);
+                adkedsBtn.setTextColor(Color.BLACK);
                 break;
             case R.id.dkll:
                 if (dkjx.getText().length() == 0){
@@ -101,7 +108,7 @@ public class GJJDK extends Fragment {
                     if (!Util.isNumeric(dkjx.getText().toString())){
                         Toast.makeText(getActivity().getApplicationContext(),"贷款期限格式错误",Toast.LENGTH_SHORT).show();
                     }else {
-                        LoanTaxBean bean = ((DKJS) getActivity()).getLoanTaxBean();
+                        LoanTaxBean bean = ((DKJSActivity) getActivity()).getLoanTaxBean();
                         if (bean == null){
                             Toast.makeText(getActivity().getApplicationContext(),"利率获取中,请稍等",Toast.LENGTH_SHORT).show();
                         }else{
@@ -111,7 +118,7 @@ public class GJJDK extends Fragment {
                             }else{
                                 lll = Float.parseFloat(bean.getGjj().get("2"));
                             }
-                            ((DKJS) getActivity()).selectLL(lll,new DKJS.SelectLLCallBack() {
+                            ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
                                 @Override
                                 public void selectItem(float value) {
                                     DecimalFormat df  = new DecimalFormat("0.00");
@@ -125,13 +132,18 @@ public class GJJDK extends Fragment {
                 break;
             case R.id.debxBtn:
                 isDEBX = true;
-                debxBtn.setBackgroundColor(Color.parseColor("#dddddd"));
-                debjBtn.setBackgroundColor(Color.parseColor("#f1f1f1"));
-                break;
+                debxBtn.setBackgroundResource(R.drawable.btn_radio_sel);
+                debxBtn.setTextColor(Color.WHITE);
+
+                debjBtn.setBackgroundResource(0);
+                debjBtn.setTextColor(Color.BLACK);                break;
             case R.id.debjBtn:
                 isDEBX = false;
-                debxBtn.setBackgroundColor(Color.parseColor("#f1f1f1"));
-                debjBtn.setBackgroundColor(Color.parseColor("#dddddd"));
+                debjBtn.setBackgroundResource(R.drawable.btn_radio_sel);
+                debjBtn.setTextColor(Color.WHITE);
+
+                debxBtn.setBackgroundResource(0);
+                debxBtn.setTextColor(Color.BLACK);
                 break;
         }
     }
@@ -190,7 +202,7 @@ public class GJJDK extends Fragment {
         b.putString("dkll",dkllStr);
 
         Intent i = new Intent();
-        i.setClass((DKJS)getActivity(), DKJSResult.class);
+        i.setClass((DKJSActivity)getActivity(), DKJSResult.class);
         i.putExtra("data",b);
         getActivity().startActivity(i);
     }

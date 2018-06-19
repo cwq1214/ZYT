@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="106dp"
     android:background="#fff">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/apartmentName"
-            android:textSize="16dp"
+            android:textSize="15dp"
             android:textColor="#000" />
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/price"
             android:layout_alignParentRight="true"
-            android:textColor="#000"
+            android:textColor="#FFFF0505"
             android:textSize="14dp" />
     </RelativeLayout>
     <RelativeLayout
@@ -46,18 +46,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:textColor="#000"
+                android:textColor="#FF7A7A7A"
                 android:id="@+id/dong"
-                android:textSize="14dp"
+                android:textSize="13dp"
                 android:singleLine="true"
                 android:ellipsize="end" />
             <TextView
                 android:text="2301"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
+                android:textColor="#FF7A7A7A"
                 android:id="@+id/ceng"
-                android:textSize="14dp"
+                android:textSize="13dp"
                 android:singleLine="true"
                 android:ellipsize="end" />
         </LinearLayout>
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:textColor="#000"
+                android:textColor="#FF7A7A7A"
                 android:id="@+id/contact"
                 android:textSize="14dp"
                 android:singleLine="true"
@@ -128,9 +128,9 @@
                 android:text="香港地产"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
+                android:textColor="#FF7A7A7A"
                 android:id="@+id/company"
-                android:textSize="14dp"
+                android:textSize="15dp"
                 android:singleLine="true"
                 android:ellipsize="end" />
         </LinearLayout>
@@ -141,7 +141,7 @@
             android:layout_alignParentRight="true"
             android:textColor="#000"
             android:id="@+id/phonenumber"
-            android:textSize="14dp"
+            android:textSize="15dp"
             android:singleLine="true"
             android:ellipsize="end" />
     </RelativeLayout>

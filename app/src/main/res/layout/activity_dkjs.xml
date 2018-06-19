@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.zyt.dkjs.DKJS"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/activityBg"
     android:weightSum="1">
 
     <RelativeLayout
@@ -24,13 +25,13 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="贷款计算"
             android:id="@+id/textView28"
-            android:textSize="24dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:layout_centerInParent="true" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="12dp"
+            android:layout_height="21dp"
             android:id="@+id/backBtn"
             android:layout_centerVertical="true"
             android:src="@drawable/back"
@@ -42,43 +43,20 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
-        <TextView
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="商业贷款"
-            android:id="@+id/sydk"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="1"
-            android:textColor="#000"
-            android:textSize="16dp"
-            android:background="#aaaaaa" />
+            android:layout_height="50dp"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="#F92D24"
+            app:tabTextColor="#93000000"
+            app:tabTextAppearance="@style/tabTextSize"
+            app:tabPaddingBottom="10dp"
+            app:tabPaddingTop="10dp"
+            app:tabMode="fixed"
+            >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="公积金贷款"
-            android:id="@+id/gjjdk"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="1"
-            android:textColor="#000"
-            android:textSize="16dp"
-            android:background="#dddddd"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="组合贷款"
-            android:id="@+id/zhdk"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="1"
-            android:textColor="#000"
-            android:textSize="16dp"
-            android:background="#dddddd" />
+        </android.support.design.widget.TabLayout>
     </LinearLayout>
 
     <FrameLayout
@@ -113,7 +91,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="57dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
@@ -126,10 +104,10 @@
             android:text="计算"
             android:id="@+id/caculateBtn"
             android:layout_weight="1"
-            android:background="@color/bottomBar"
-            android:textSize="18dp"
+            android:background="#F92D24"
+            android:textSize="20dp"
             android:textColor="#fff"
-            android:layout_marginRight="1dp" />
+            />
 
         <Button
             android:layout_width="wrap_content"
@@ -138,8 +116,8 @@
             android:id="@+id/resetBtn"
             android:layout_weight="1"
             android:alpha="1"
-            android:background="@color/bottomBar"
-            android:textSize="18dp"
+            android:background="#FF9D19"
+            android:textSize="20dp"
             android:textColor="#fff" />
     </LinearLayout>
 

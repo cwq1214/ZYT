@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zyt.clp.QJActivity">
+    android:orientation="vertical"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,13 +23,13 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="全景"
             android:id="@+id/textView126"
-            android:textSize="24dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:layout_centerInParent="true" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="12dp"
+            android:layout_height="21dp"
             android:id="@+id/backBtn"
             android:layout_centerVertical="true"
             android:src="@drawable/back"
@@ -41,4 +42,4 @@
         android:id="@+id/qjMapView"
         android:layout_below="@+id/relativeLayout17"
         android:layout_centerHorizontal="true" />
-</RelativeLayout>
+</LinearLayout>

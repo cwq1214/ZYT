@@ -2,7 +2,6 @@ package com.zyt.sunpan.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,21 +15,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zyt.App;
+import com.zyt.HttpUtil.BeanCallBack;
 import com.zyt.R;
 import com.zyt.base.BaseJSON;
 import com.zyt.sunpan.SunpanAdapter;
 import com.zyt.sunpan.bean.Sunpan;
 import com.zyt.util.ColorDecoration;
 import com.zyt.util.ConstList;
+import com.zyt.util.ToastUtils;
+import com.zyt.util.UserInfo;
+import com.zyt.util.Util;
+import com.zyt.util.WeChartHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -60,6 +68,8 @@ public class ShareSunpanActivity extends AppCompatActivity {
     SwipeRefreshLayout refreshLayout;
     @InjectView(R.id.share)
     TextView share;
+    @InjectView(R.id.mySP)
+    TextView mySp;
 
 
     boolean isOpenSearchInput = false;
@@ -85,13 +95,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
     @InjectView(R.id.searchET)
     EditText searchET;
 
-
-    @InjectView(R.id.search_hint)
-    TextView searchHint;
-    @InjectView(R.id.search_block)
-    LinearLayout searchBlock;
-    @InjectView(R.id.mask)
-    RelativeLayout mask;
+    WeChartHelper weChartHelper;
 
 
     @Override
@@ -102,6 +106,53 @@ public class ShareSunpanActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         initView();
+        weChartHelper = new WeChartHelper();
+        weChartHelper.init(this, App.weiXin_AppId);
+        weChartHelper.registerToWx();
+        weChartHelper.setReceiveUserInfoListener(new WeChartHelper.ReceiveUserInfoListener() {
+            @Override
+            public void onGotUserInfo(WeChartHelper.WxUser user) {
+                Logger.d(user);
+
+
+                OkHttpUtils.post().url(getString(R.string.baseUrl)+getString(R.string.loginUrl2)).addParams("openid",user.getOpenid()).build().execute(new BeanCallBack<String>() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort(ShareSunpanActivity.this,"登陆失败");
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ToastUtils.showShort(ShareSunpanActivity.this,"登陆成功");
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            int code = jsonObject.getInt("code");
+                            if (code == 200){
+                                String userId = jsonObject.getJSONObject("data").getString("userId");
+                                Util.setUserID(ShareSunpanActivity.this,userId);
+                                UserInfo.setToken(userId);
+                            }
+
+                            mySp.setVisibility(code==200?View.VISIBLE:View.INVISIBLE);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+        mySp.setVisibility(UserInfo.isLogin()?View.VISIBLE:View.INVISIBLE);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         refreshLayout.post(new Runnable() {
             @Override
@@ -110,10 +161,17 @@ public class ShareSunpanActivity extends AppCompatActivity {
                 onRefreshListener.onRefresh();
             }
         });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        weChartHelper.unInit();
     }
 
     private void initView() {
-        searchET.setFocusable(false);
+//        searchET.setFocusable(false);
         onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -324,49 +382,19 @@ public class ShareSunpanActivity extends AppCompatActivity {
 
     @OnClick(R.id.share)
     public void onShareClick() {
-        ReleaseOrUpdateSunpanActivity.launch(this,true,null);
-    }
-
-    @OnClick(R.id.mask)
-    public void onMaskClick() {
-
-        if (!isOpenSearchInput) {
-            Log.e(TAG, "in");
-            if (defaultX == -1) {
-                defaultX = searchBlock.getX();
-
-            }
-            moveAnimaHor(searchBlock, 0, -defaultX + 10, new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    searchHint.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animator) {
-
-                }
-            });
-            isOpenSearchInput = true;
-            searchET.setFocusableInTouchMode(true);
-            searchET.setFocusable(true);
-            searchET.requestFocus();
-            mask.setClickable(false);
+        if (UserInfo.isLogin()){
+            ReleaseOrUpdateSunpanActivity.launch(this,true,null);
+        }else {
+            weChartHelper.login();
         }
+
     }
+
+
     @OnClick(R.id.mySP)
     public void onMySpClick(){
-        MySunpanActivity.launch(this);
+        if (UserInfo.isLogin())
+            MySunpanActivity.launch(this);
     }
 
     private void moveAnimaHor(View targetView, float fromX, float toX, Animator.AnimatorListener listener) {

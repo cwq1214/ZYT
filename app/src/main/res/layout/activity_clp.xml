@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".clp.CLPActivity">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,13 +21,13 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="查楼盘"
             android:id="@+id/textView"
-            android:textSize="24dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:layout_centerInParent="true" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="12dp"
+            android:layout_height="21dp"
             android:id="@+id/backBtn"
             android:layout_centerVertical="true"
             android:src="@drawable/back"
@@ -35,9 +35,8 @@
     </RelativeLayout>
     <com.baidu.mapapi.map.MapView
         android:id="@+id/bmapView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/relativeLayout" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchResultView"
@@ -50,28 +49,50 @@
         android:layout_marginRight="10dp" />
 
     <LinearLayout
+
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="46dp"
         android:layout_below="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/linearLayout2"
-        android:background="#fff">
-
+        android:clipChildren="true"
+        android:background="@drawable/border">
+        <LinearLayout
+            android:id="@+id/btn_sel_location"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_currentLocation"
+                android:textColor="#424242"
+                android:textSize="15dp"
+                android:layout_marginLeft="14dp"
+                android:text="地址"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:src="@drawable/arrow_down_black"
+                android:layout_marginLeft="7dp"
+                android:layout_width="7dp"
+                android:layout_height="4dp" />
+        </LinearLayout>
         <EditText
+            android:background="@null"
+            android:hint="输入关键字搜索"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/searchET"
             android:layout_alignTop="@+id/bmapView"
             android:layout_centerHorizontal="true"
-            android:background="#fff"
             android:singleLine="true"
             android:layout_weight="4"
             android:layout_marginLeft="10dp"
-            android:textSize="16dp" />
+            android:textSize="15dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -79,8 +100,8 @@
             android:text="搜索"
             android:id="@+id/searchBtn"
             android:layout_weight="1"
-            android:background="@color/bottomBar"
-            android:textSize="16dp"
+            android:background="@drawable/btn_right_radio_red"
+            android:textSize="15dp"
             android:textColor="#fff" />
     </LinearLayout>
 

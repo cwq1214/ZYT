@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".spjsq.SPJSQActivity">
+    android:orientation="vertical"
+    android:background="@color/activityBg"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,13 +23,13 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="商铺计税器"
                 android:id="@+id/textView"
-                android:textSize="24dp"
+                android:textSize="17dp"
                 android:textColor="#fff"
                 android:layout_centerInParent="true" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="12dp"
+            android:layout_height="21dp"
             android:id="@+id/backBtn"
             android:layout_centerVertical="true"
             android:src="@drawable/back"
@@ -35,14 +37,12 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/relativeLayout"
-        android:layout_marginBottom="50dp"
-        android:background="@color/activityBg"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -222,7 +222,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="57dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
@@ -235,10 +235,10 @@
             android:text="计算"
             android:id="@+id/caculateBtn"
             android:layout_weight="1"
-            android:background="@color/bottomBar"
-            android:textSize="18dp"
-            android:textColor="#fff"
-            android:layout_marginRight="1dp" />
+            android:background="#F92D24"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            />
 
         <Button
             android:layout_width="wrap_content"
@@ -247,9 +247,9 @@
             android:id="@+id/resetBtn"
             android:layout_weight="1"
             android:alpha="1"
-            android:background="@color/bottomBar"
-            android:textSize="18dp"
-            android:textColor="#fff" />
+            android:background=" #FF9D19"
+            android:textSize="20dp"
+            android:textColor="#FFF" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -61,13 +61,13 @@ public class WelcomePageActivity extends AppCompatActivity {
 
         setContentView(imageView);
 
-        autoLogin();
+//        autoLogin();
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                finish();
-                startActivity(new Intent(WelcomePageActivity.this,LoginActivity.class));
+                startActivity(new Intent(WelcomePageActivity.this,MainActivity.class));
             }
         },3000);
 

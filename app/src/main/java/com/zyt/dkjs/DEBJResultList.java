@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.zyt.HttpUtil.Bean.MYCHBean;
 import com.zyt.R;
 

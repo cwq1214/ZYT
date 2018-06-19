@@ -79,12 +79,6 @@ public class MySunpanActivity extends AppCompatActivity {
     RelativeLayout relativeLayout10;
     @InjectView(R.id.searchET)
     EditText searchET;
-    @InjectView(R.id.search_hint)
-    TextView searchHint;
-    @InjectView(R.id.search_block)
-    LinearLayout searchBlock;
-    @InjectView(R.id.mask)
-    RelativeLayout mask;
     @InjectView(R.id.background_msg)
     TextView backgroundMsg;
     @InjectView(R.id.recyclerView)
@@ -123,7 +117,7 @@ public class MySunpanActivity extends AppCompatActivity {
 
             }
         });
-        searchET.setFocusable(false);
+//        searchET.setFocusable(false);
         onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -333,44 +327,6 @@ public class MySunpanActivity extends AppCompatActivity {
         finish();
     }
 
-
-    @OnClick(R.id.mask)
-    public void onMaskClick() {
-
-        if (!isOpenSearchInput) {
-            Log.e(TAG, "in");
-            if (defaultX == -1) {
-                defaultX = searchBlock.getX();
-
-            }
-            moveAnimaHor(searchBlock, 0, -defaultX + 10, new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    searchHint.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animator) {
-
-                }
-            });
-            isOpenSearchInput = true;
-            searchET.setFocusableInTouchMode(true);
-            searchET.setFocusable(true);
-            searchET.requestFocus();
-            mask.setClickable(false);
-        }
-    }
 
     private void delMySunpan(final String sunpanId){
         Log.e(TAG,sunpanId);

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.baidu.lbsapi.BMapManager;
 import com.baidu.lbsapi.panoramaview.PanoramaView;
+import com.baidu.lbsapi.panoramaview.PanoramaViewListener;
+import com.zyt.App;
 import com.zyt.R;
 
 import butterknife.ButterKnife;
@@ -27,6 +29,48 @@ public class QJActivity extends AppCompatActivity {
 
         qjMapView.setPanorama(getIntent().getDoubleExtra("longi",0),getIntent().getDoubleExtra("lanti",0));
         qjMapView.setPanoramaImageLevel(PanoramaView.ImageDefinition.ImageDefinitionHigh);
+        qjMapView.setPanoramaViewListener(new PanoramaViewListener() {
+            @Override
+            public void onDescriptionLoadEnd(String s) {
+
+            }
+
+            @Override
+            public void onLoadPanoramaBegin() {
+
+            }
+
+            @Override
+            public void onLoadPanoramaEnd(String s) {
+
+            }
+
+            @Override
+            public void onLoadPanoramaError(String s) {
+
+            }
+
+            @Override
+            public void onMessage(String s, int i) {
+
+            }
+
+            @Override
+            public void onCustomMarkerClick(String s) {
+
+            }
+
+            @Override
+            public void onMoveStart() {
+
+            }
+
+            @Override
+            public void onMoveEnd() {
+
+            }
+        });
+
     }
 
     @Override
@@ -48,10 +92,10 @@ public class QJActivity extends AppCompatActivity {
     }
 
     private void initQJView(){
-        PanoApplication app = (PanoApplication)this.getApplication();
+        App app = (App)this.getApplication();
         if (app.bMapManager == null){
             app.bMapManager = new BMapManager(app);
-            app.bMapManager.init(new PanoApplication.MyGeneralListener());
+            app.bMapManager.init(new App.MyGeneralListener());
         }
     }
 

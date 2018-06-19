@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.zyt.HttpUtil.Bean.LoanTaxBean;
 import com.zyt.R;
-import com.zyt.dkjs.DKJS;
+import com.zyt.dkjs.DKJSActivity;
 import com.zyt.dkjs.DKJSResult;
 import com.zyt.util.Util;
 
@@ -87,7 +87,7 @@ public class ZHDK extends Fragment {
         b.putInt("gjjdkje",Integer.parseInt(gjjdkje.getText().toString()));
 
         Intent i = new Intent();
-        i.setClass((DKJS)getActivity(), DKJSResult.class);
+        i.setClass((DKJSActivity)getActivity(), DKJSResult.class);
         i.putExtra("data",b);
         getActivity().startActivity(i);
     }
@@ -117,7 +117,7 @@ public class ZHDK extends Fragment {
                     if (!Util.isNumeric(dkqx.getText().toString())){
                         Toast.makeText(getActivity().getApplicationContext(),"贷款期限格式错误",Toast.LENGTH_SHORT).show();
                     }else {
-                        LoanTaxBean bean = ((DKJS) getActivity()).getLoanTaxBean();
+                        LoanTaxBean bean = ((DKJSActivity) getActivity()).getLoanTaxBean();
                         if (bean == null){
                             Toast.makeText(getActivity().getApplicationContext(),"利率获取中,请稍等",Toast.LENGTH_SHORT).show();
                         }else{
@@ -129,7 +129,7 @@ public class ZHDK extends Fragment {
                             }else{
                                 lll = Float.parseFloat(bean.getBusiness().get("3"));
                             }
-                            ((DKJS) getActivity()).selectLL(lll,new DKJS.SelectLLCallBack() {
+                            ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
                                 @Override
                                 public void selectItem(float value) {
                                     DecimalFormat df  = new DecimalFormat("0.00");
@@ -148,7 +148,7 @@ public class ZHDK extends Fragment {
                     if (!Util.isNumeric(dkqx.getText().toString())){
                         Toast.makeText(getActivity().getApplicationContext(),"贷款期限格式错误",Toast.LENGTH_SHORT).show();
                     }else {
-                        LoanTaxBean bean = ((DKJS) getActivity()).getLoanTaxBean();
+                        LoanTaxBean bean = ((DKJSActivity) getActivity()).getLoanTaxBean();
                         if (bean == null){
                             Toast.makeText(getActivity().getApplicationContext(),"利率获取中,请稍等",Toast.LENGTH_SHORT).show();
                         }else{
@@ -158,7 +158,7 @@ public class ZHDK extends Fragment {
                             }else{
                                 lll = Float.parseFloat(bean.getGjj().get("2"));
                             }
-                            ((DKJS) getActivity()).selectLL(lll,new DKJS.SelectLLCallBack() {
+                            ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
                                 @Override
                                 public void selectItem(float value) {
                                     DecimalFormat df  = new DecimalFormat("0.00");
@@ -172,13 +172,23 @@ public class ZHDK extends Fragment {
                 break;
             case R.id.debxBtn:
                 isDEBX = true;
-                debxBtn.setBackgroundColor(Color.parseColor("#dddddd"));
-                debjBtn.setBackgroundColor(Color.parseColor("#f1f1f1"));
+
+                debxBtn.setBackgroundResource(R.drawable.btn_radio_sel);
+                debxBtn.setTextColor(Color.WHITE);
+
+                debjBtn.setBackgroundResource(0);
+                debjBtn.setTextColor(Color.BLACK);
+
+
                 break;
             case R.id.debjBtn:
                 isDEBX = false;
-                debxBtn.setBackgroundColor(Color.parseColor("#f1f1f1"));
-                debjBtn.setBackgroundColor(Color.parseColor("#dddddd"));
+
+                debjBtn.setBackgroundResource(R.drawable.btn_radio_sel);
+                debjBtn.setTextColor(Color.WHITE);
+
+                debxBtn.setBackgroundResource(0);
+                debxBtn.setTextColor(Color.BLACK);
                 break;
         }
     }

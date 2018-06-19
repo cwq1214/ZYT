@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/textView46"
                     android:layout_marginLeft="100dp"
                     android:layout_marginRight="10dp"
@@ -56,9 +56,9 @@
                         android:id="@+id/adkedsBtn"
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
-                        android:textColor="#000"
+                        android:textColor="#FFF"
                         android:textSize="14dp"
-                        android:background="#dddddd"
+                        android:background="@drawable/btn_radio_sel"
                         android:textIsSelectable="false" />
 
                     <TextView
@@ -71,8 +71,6 @@
                         android:gravity="center_vertical|center_horizontal"
                         android:textColor="#000"
                         android:textSize="14dp"
-                        android:layout_marginLeft="1dp"
-                        android:background="#f1f1f1"
                         android:textIsSelectable="false" />
                 </LinearLayout>
             </RelativeLayout>
@@ -355,9 +353,9 @@
                         android:id="@+id/debxBtn"
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
-                        android:textColor="#000"
+                        android:textColor="#FFF"
                         android:textSize="14dp"
-                        android:background="#dddddd"
+                        android:background="@drawable/btn_radio_sel"
                         android:textIsSelectable="false" />
 
                     <TextView
@@ -370,8 +368,6 @@
                         android:gravity="center_vertical|center_horizontal"
                         android:textColor="#000"
                         android:textSize="14dp"
-                        android:layout_marginLeft="1dp"
-                        android:background="#f1f1f1"
                         android:textIsSelectable="false" />
                 </LinearLayout>
             </RelativeLayout>

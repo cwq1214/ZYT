@@ -7,21 +7,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -30,17 +30,30 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.orhanobut.hawk.Hawk;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWHitBean;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWHouseBean;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWResultBean;
 import com.zyt.HttpUtil.BeanCallBack;
+import com.zyt.MainActivity;
 import com.zyt.R;
+import com.zyt.base.City;
+import com.zyt.base.Province;
+import com.zyt.util.LocationUtil;
+import com.zyt.util.UserInfo;
 import com.zyt.util.Util;
 
 import java.util.ArrayList;
@@ -54,13 +67,18 @@ import okhttp3.Call;
 public class CLPActivity extends AppCompatActivity {
 
 
-    public LocationClient mLocationClient = null;
-    public BDLocationListener myListener = new MyListener();
-
     @InjectView(R.id.searchET)
     EditText searchET;
     @InjectView(R.id.keySearchResult)
     RecyclerView keySearchResult;
+    @InjectView(R.id.searchResultView)
+    RecyclerView searchResultView;
+    @InjectView(R.id.bmapView)
+    MapView bmapView;
+    @InjectView(R.id.text_currentLocation)
+    TextView textCurrentLocation;
+    @InjectView(R.id.btn_sel_location)
+    LinearLayout btnSelLocation;
 
     private ArrayList<SFWHouseBean> keySearchBean = new ArrayList<SFWHouseBean>();
     private KeySearchAdapter keySearchAdapter;
@@ -68,25 +86,74 @@ public class CLPActivity extends AppCompatActivity {
     private ArrayList<SFWHouseBean> searchHouseBean = new ArrayList<SFWHouseBean>();
     private PersonAdapter personAdapter;
 
-    @InjectView(R.id.searchResultView)
-    RecyclerView searchResultView;
 
-    @InjectView(R.id.bmapView)
-    MapView bmapView;
+    private List<Province> options1Items = new ArrayList<>();
+    private List<List<City>> options2Items = new ArrayList<>();
 
+    String currentLocation;
     private String cityPy = "";
 
+    GeoCoder mSearch;
+    public LocationClient mLocationClient = null;
+    public BDAbstractLocationListener myListener = new MyListener();
+    OptionsPickerView pvOptions;
+
+    MapStatus currentMapStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SDKInitializer.initialize(getApplicationContext());
 
         setContentView(R.layout.activity_clp);
         ButterKnife.inject(this);
 
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(myListener);
+
+        options1Items = LocationUtil.getInstance().getProvinces();
+
+        for (int i=0;i<options1Items.size();i++){
+            options2Items.add(options1Items.get(i).getCities());
+        }
+
+        pvOptions = new OptionsPickerBuilder(this, (options1, option2, options3, v) -> {
+            //返回的分别是三个级别的选中位置
+
+            currentLocation =  options2Items.get(options1).get(option2).getPickerViewText();
+            if (TextUtils.isEmpty(currentLocation)){
+                currentLocation =  options1Items.get(options1).getPickerViewText();
+            }
+            searchET.setText("");
+            textCurrentLocation.setText(currentLocation);
+            mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+                @Override
+                public void onGetGeoCodeResult(GeoCodeResult result) {
+                    if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                        //没有检索到结果
+                        return;
+                    }
+                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(result.getLocation());
+                    bmapView.getMap().setMapStatus(update);
+                    cityPy= Util.getFirstSpell(currentLocation);
+                    onMoveSearch(bmapView.getMap().getMapStatus());
+
+                    //获取地理编码结果
+                }
+
+                @Override
+                public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                    if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                        //没有找到检索结果
+                    }
+
+                    //获取反向地理编码结果
+                }
+            });
+            mSearch.geocode(new GeoCodeOption()
+                    .city(currentLocation).address("政府"));
+
+
+        }).build();
+        pvOptions.setPicker(options1Items, options2Items);
 
         initSearchResultView();
 
@@ -96,9 +163,54 @@ public class CLPActivity extends AppCompatActivity {
 
         initSearch();
 
+        mSearch = GeoCoder.newInstance();
+
+        currentLocation = UserInfo.getUserLocation();
+        if (currentLocation!=null){
+            textCurrentLocation.setText(currentLocation);
+            cityPy = Util.getFirstSpell(currentLocation);
+
+            mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+                @Override
+                public void onGetGeoCodeResult(GeoCodeResult result) {
+                    if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                        //没有检索到结果
+                        return;
+                    }
+                    MyLocationData locData = new MyLocationData.Builder()
+                            .direction(100).latitude(result.getLocation().latitude)
+                            .longitude(result.getLocation().longitude).build();
+
+
+                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(result.getLocation());
+                    bmapView.getMap().setMapStatus(update);
+
+                    onMoveSearch(bmapView.getMap().getMapStatus());
+                    //获取地理编码结果
+                }
+
+                @Override
+                public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                    if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                        //没有找到检索结果
+                    }
+
+                    //获取反向地理编码结果
+                }
+            });
+            mSearch.geocode(new GeoCodeOption()
+                    .city(currentLocation).address("人民政府"));
+        }else {
+            mLocationClient.start();
+        }
+    }
+    @OnClick(R.id.btn_sel_location)
+    public void onSelLocationClick(){
+
+        pvOptions.show();
     }
 
-    public void initSearch(){
+    public void initSearch() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         keySearchResult.setLayoutManager(manager);
@@ -109,14 +221,14 @@ public class CLPActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.searchBtn)
-    public void searchBtnClick(){
-        if (searchET.getText().length() != 0){
+    public void searchBtnClick() {
+        if (searchET.getText().length() != 0) {
             searchResultView.setVisibility(View.GONE);
             searchET.clearFocus();
-            if (cityPy.length()==0){
-                Toast.makeText(getApplicationContext(),"获取城市中...",Toast.LENGTH_SHORT).show();
-            }else{
-                OkHttpUtils.get().url("http://esf."+cityPy+".fang.com/map/?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword="+searchET.getText().toString()+"&comarea=&orderby=30&isyouhui=&newCode=&houseNum=&schoolDist=&schoolid=&ecshop=&PageNo=1&zoom=18&a=ajaxSearch&city="+cityPy+"&searchtype=")
+            if (cityPy.length() == 0) {
+                Toast.makeText(getApplicationContext(), "获取城市中...", Toast.LENGTH_SHORT).show();
+            } else {
+                OkHttpUtils.get().url("http://esf." + cityPy + ".fang.com/map/?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=" + searchET.getText().toString() + "&comarea=&orderby=30&isyouhui=&newCode=&houseNum=&schoolDist=&schoolid=&ecshop=&PageNo=1&zoom=18&a=ajaxSearch&city=" + cityPy + "&searchtype=")
                         .build()
                         .execute(new BeanCallBack<SFWResultBean<SFWHitBean<SFWHouseBean>>>() {
                             @Override
@@ -126,15 +238,15 @@ public class CLPActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(SFWResultBean<SFWHitBean<SFWHouseBean>> response, int id) {
-                                Log.e("bee",response.toString());
-                                if (response.getLoupan()!=null){
-                                    if (response.getLoupan().getHit().size()!=0){
+                                Log.e("bee", response.toString());
+                                if (response.getLoupan() != null) {
+                                    if (response.getLoupan().getHit().size() != 0) {
                                         keySearchBean = new ArrayList<SFWHouseBean>();
                                         keySearchBean.addAll(response.getLoupan().getHit());
                                         keySearchAdapter.notifyDataSetChanged();
                                         keySearchResult.setVisibility(View.VISIBLE);
-                                    }else{
-                                        Toast.makeText(getApplicationContext(),"暂无数据",Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -150,39 +262,30 @@ public class CLPActivity extends AppCompatActivity {
         searchResultView.setLayoutManager(manager);
         searchResultView.setAdapter(personAdapter = new PersonAdapter());
 
-        searchResultView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
+        searchResultView.setOnTouchListener((view, motionEvent) -> true);
 
         searchResultView.setVisibility(View.GONE);
     }
 
     public void initMapGest() {
-        bmapView.getMap().setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                final int index = marker.getExtraInfo().getInt("index");
-                Button button = new Button(getApplicationContext());
-                button.setText("进入全景");
-                InfoWindow mInfoWindow = new InfoWindow(button, marker.getPosition(), -100);
+        bmapView.getMap().setMapType(BaiduMap.MAP_TYPE_NORMAL);
 
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(CLPActivity.this,QJActivity.class);
-                        i.putExtra("lanti",searchHouseBean.get(index).getY());
-                        i.putExtra("longi",searchHouseBean.get(index).getX());
-                        CLPActivity.this.startActivity(i);
-                    }
-                });
+        bmapView.getMap().setOnMarkerClickListener(marker -> {
+            final int index = marker.getExtraInfo().getInt("index");
+            Button button = new Button(getApplicationContext());
+            button.setText("进入全景");
+            InfoWindow mInfoWindow = new InfoWindow(button, marker.getPosition(), -100);
 
-                bmapView.getMap().showInfoWindow(mInfoWindow);
-                searchResultView.scrollToPosition(index);
-                return false;
-            }
+            button.setOnClickListener(view -> {
+                Intent i = new Intent(CLPActivity.this, QJActivity.class);
+                i.putExtra("lanti", searchHouseBean.get(index).getY());
+                i.putExtra("longi", searchHouseBean.get(index).getX());
+                CLPActivity.this.startActivity(i);
+            });
+
+            bmapView.getMap().showInfoWindow(mInfoWindow);
+            searchResultView.scrollToPosition(index);
+            return false;
         });
 
         BaiduMap.OnMapStatusChangeListener statusChangeListener = new BaiduMap.OnMapStatusChangeListener() {
@@ -192,73 +295,85 @@ public class CLPActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onMapStatusChangeStart(MapStatus mapStatus, int i) {
+                searchResultView.setVisibility(View.GONE);
+
+            }
+
+            @Override
             public void onMapStatusChange(MapStatus mapStatus) {
 
             }
 
             @Override
             public void onMapStatusChangeFinish(MapStatus mapStatus) {
-                Log.e("bee","map status change");
-                if (cityPy.length()==0){
-                    Toast.makeText(getApplicationContext(),"获取城市中...",Toast.LENGTH_SHORT).show();
-                }else {
-                    OkHttpUtils.post()
-//                        .url("http://api.map.baidu.com/place/v2/search?query=房地产&page_size=10&page_num=0&scope=2&bounds=" + mapStatus.bound.southwest.latitude + "," + mapStatus.bound.southwest.longitude + "," + mapStatus.bound.northeast.latitude + "," + mapStatus.bound.northeast.longitude + "&output=json&ak=f6OEsy4Iyen4SO58SOpUijIhinZ328wm&mcode=BB:3E:B4:30:37:61:B0:0B:71:BF:B8:11:1D:38:1C:20:6D:EC:FA:89;com.zyt")
-                            .url("http://esf."+cityPy+".fang.com/map/?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=&comarea=&orderby=&isyouhui=&x1=" + mapStatus.bound.southwest.longitude + "&y1=" + mapStatus.bound.southwest.latitude + "&x2=" + mapStatus.bound.northeast.longitude + "&y2=" + mapStatus.bound.northeast.latitude + "&newCode=&houseNum=&schoolDist=&schoolid=&PageNo=1&zoom=18&a=ajaxSearch&searchtype=")
-                            .build()
-                            .execute(new BeanCallBack<SFWResultBean<SFWHitBean<SFWHouseBean>>>() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
+                Log.e("bee", "map status change");
+                currentMapStatus = mapStatus;
 
-                                }
-
-                                @Override
-                                public void onResponse(SFWResultBean<SFWHitBean<SFWHouseBean>> response, int id) {
-                                    Log.e("bee", response.toString());
-                                    bmapView.getMap().clear();
-
-
-                                    searchHouseBean = new ArrayList<SFWHouseBean>();
-
-                                    if (response.getLoupan() == null) {
-                                        Toast.makeText(getApplicationContext(),"暂无数据",Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-
-                                    List<SFWHouseBean> houseBeanList = response.getLoupan().getHit();
-                                    for (SFWHouseBean bean : houseBeanList) {
-
-                                        if (bean.getPrice() == null) {
-                                            continue;
-                                        }
-
-                                        Bundle dataBundle = new Bundle();
-                                        dataBundle.putInt("index", searchHouseBean.size());
-                                        searchHouseBean.add(bean);
-
-                                        BitmapDescriptor bitmap = BitmapDescriptorFactory
-                                                .fromResource(R.drawable.icon_0);
-                                        OverlayOptions options = new MarkerOptions()
-                                                .position(new LatLng(bean.getY(), bean.getX()))
-                                                .icon(bitmap)
-                                                .extraInfo(dataBundle);
-                                        bmapView.getMap().addOverlay(options);
-                                    }
-
-                                    if (searchHouseBean.size() != 0) {
-                                        searchResultView.setVisibility(View.VISIBLE);
-                                        personAdapter.notifyDataSetChanged();
-                                        searchResultView.scrollToPosition(0);
-                                    }else{
-
-                                    }
-                                }
-                            });
+                if (cityPy.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "获取城市中...", Toast.LENGTH_SHORT).show();
+                } else {
+                    onMoveSearch(mapStatus);
                 }
             }
         };
 
         bmapView.getMap().setOnMapStatusChangeListener(statusChangeListener);
+    }
+
+    public void onMoveSearch(MapStatus mapStatus){
+        String url = "http://esf." + cityPy + ".fang.com/map/?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=&comarea=&orderby=&isyouhui=&x1=" + mapStatus.bound.southwest.longitude + "&y1=" + mapStatus.bound.southwest.latitude + "&x2=" + mapStatus.bound.northeast.longitude + "&y2=" + mapStatus.bound.northeast.latitude + "&newCode=&houseNum=&schoolDist=&schoolid=&PageNo=1&zoom=18&a=ajaxSearch&searchtype=";
+        OkHttpUtils.post()
+                .url(url)
+                .build()
+                .execute(new BeanCallBack<SFWResultBean<SFWHitBean<SFWHouseBean>>>() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(SFWResultBean<SFWHitBean<SFWHouseBean>> response, int id) {
+                        Log.e("bee", response.toString());
+                        bmapView.getMap().clear();
+
+
+                        searchHouseBean = new ArrayList<SFWHouseBean>();
+
+                        if (response.getLoupan() == null) {
+                            Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        List<SFWHouseBean> houseBeanList = response.getLoupan().getHit();
+                        for (SFWHouseBean bean : houseBeanList) {
+
+                            if (bean.getPrice() == null) {
+                                continue;
+                            }
+
+                            Bundle dataBundle = new Bundle();
+                            dataBundle.putInt("index", searchHouseBean.size());
+                            searchHouseBean.add(bean);
+
+                            BitmapDescriptor bitmap = BitmapDescriptorFactory
+                                    .fromResource(R.drawable.icon_0);
+                            OverlayOptions options = new MarkerOptions()
+                                    .position(new LatLng(bean.getY(), bean.getX()))
+                                    .icon(bitmap)
+                                    .extraInfo(dataBundle);
+                            bmapView.getMap().addOverlay(options);
+                        }
+
+                        if (searchHouseBean.size() != 0) {
+                            searchResultView.setVisibility(View.VISIBLE);
+                            personAdapter.notifyDataSetChanged();
+                            searchResultView.scrollToPosition(0);
+                        } else {
+
+                        }
+                    }
+                });
     }
 
 
@@ -278,7 +393,7 @@ public class CLPActivity extends AppCompatActivity {
         option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         mLocationClient.setLocOption(option);
-        mLocationClient.start();
+//        mLocationClient.start();
         Log.e("bee", "start get location");
     }
 
@@ -287,6 +402,8 @@ public class CLPActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         bmapView.onDestroy();
+        if (mSearch!=null)
+            mSearch.destroy();
     }
 
     @Override
@@ -306,16 +423,17 @@ public class CLPActivity extends AppCompatActivity {
         finish();
     }
 
-    class MyListener implements BDLocationListener {
+    class MyListener extends BDAbstractLocationListener {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
-            Log.e("bee", "get location success:" + bdLocation.getCityCode()+bdLocation.getCity());
+            Log.e("bee", "get location success:" + bdLocation.getCityCode() + bdLocation.getCity());
+
             String cityName = bdLocation.getCity();
-            if (cityName.contains("市")){
-                cityName = cityName.substring(0,cityName.length()-1);
+            if (cityName.contains("市")) {
+                cityName = cityName.substring(0, cityName.length() - 1);
             }
             cityPy = Util.getFirstSpell(cityName);
-            Log.e("bee",cityPy);
+            Log.e("bee", cityPy);
             bmapView.getMap().setMyLocationEnabled(true);
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(bdLocation.getRadius())
@@ -419,7 +537,7 @@ public class CLPActivity extends AppCompatActivity {
                 houseAddress.setText(bean.getAddress());
             }
 
-            public void setIndex(int i){
+            public void setIndex(int i) {
                 index = i;
             }
 
@@ -463,7 +581,7 @@ public class CLPActivity extends AppCompatActivity {
 
     }
 
-    class SpaceItemDecoration extends RecyclerView.ItemDecoration{
+    class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
         private int space;
 
@@ -474,7 +592,7 @@ public class CLPActivity extends AppCompatActivity {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 
-            if(parent.getChildPosition(view) != 0)
+            if (parent.getChildPosition(view) != 0)
                 outRect.top = space;
         }
     }
