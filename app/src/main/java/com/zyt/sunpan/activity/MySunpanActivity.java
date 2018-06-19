@@ -73,8 +73,7 @@ public class MySunpanActivity extends AppCompatActivity {
     ArrayList<Sunpan> sunpen = new ArrayList<>();
     @InjectView(R.id.textView64)
     TextView textView64;
-    @InjectView(R.id.backBtn)
-    ImageView backBtn;
+
     @InjectView(R.id.relativeLayout10)
     RelativeLayout relativeLayout10;
     @InjectView(R.id.searchET)
@@ -94,6 +93,13 @@ public class MySunpanActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         initView();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         refreshLayout.post(new Runnable() {
             @Override

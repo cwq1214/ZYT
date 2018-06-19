@@ -23,6 +23,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
@@ -207,9 +208,27 @@ public class MainActivity extends AppCompatActivity {
 
         banner.setOnBannerListener(position -> {
             String tel = banners.get(position).getaMobile();
-            Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:"+tel));
-            startActivity(intent);
+
+            new AlertView.Builder().setContext(this)
+                    .setStyle(AlertView.Style.Alert)
+                    .setOnItemClickListener((Object o, int btnposition)-> {
+                        if (btnposition==-1){
+
+                        }else if (btnposition==0){
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:"+tel));
+                            startActivity(intent);
+                        }
+                    })
+                    .setTitle("拨打号码")
+                    .setCancelText("取消")
+                    .setDestructive("拨打")
+                    .setMessage(tel)
+
+                    .build().show();
+
+
+
 
         });
 

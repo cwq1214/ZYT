@@ -33,8 +33,6 @@ public class LXWMActivity extends AppCompatActivity {
 
     @InjectView(R.id.textView64)
     TextView textView64;
-    @InjectView(R.id.backBtn)
-    ImageView backBtn;
     @InjectView(R.id.relativeLayout10)
     RelativeLayout relativeLayout10;
     @InjectView(R.id.androidImg)

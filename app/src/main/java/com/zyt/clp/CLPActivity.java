@@ -2,6 +2,7 @@ package com.zyt.clp;
 
 import android.content.Intent;
 import android.graphics.Rect;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -207,6 +209,9 @@ public class CLPActivity extends AppCompatActivity {
     @OnClick(R.id.btn_sel_location)
     public void onSelLocationClick(){
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchET.getWindowToken(), 0);
+
         pvOptions.show();
     }
 
@@ -218,10 +223,16 @@ public class CLPActivity extends AppCompatActivity {
         keySearchResult.addItemDecoration(new SpaceItemDecoration(1));
 
         keySearchResult.setVisibility(View.GONE);
+
+
     }
 
     @OnClick(R.id.searchBtn)
     public void searchBtnClick() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchET.getWindowToken(), 0);
+
+
         if (searchET.getText().length() != 0) {
             searchResultView.setVisibility(View.GONE);
             searchET.clearFocus();

@@ -34,8 +34,6 @@ public class ReleaseOrUpdateSunpanActivity extends AppCompatActivity {
 
     String TAG = getClass().getSimpleName();
 
-    @InjectView(R.id.backBtn)
-    ImageView backBtn;
     @InjectView(R.id.relativeLayout10)
     RelativeLayout relativeLayout10;
     @InjectView(R.id.input_apartmentName)

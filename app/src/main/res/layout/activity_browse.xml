@@ -19,7 +19,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text=""
             android:id="@+id/title"
-            android:textSize="24dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:layout_marginLeft="50dp"
             android:gravity="center"
@@ -27,13 +27,19 @@
             android:layout_marginRight="50dp"
             android:ellipsize="end"
             android:singleLine="true" />
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+
+        <RelativeLayout
             android:id="@+id/backBtn"
-            android:layout_centerVertical="true"
-            android:src="@drawable/back"
-            android:layout_marginLeft="10dp" />
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="21dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back"
+                android:layout_marginLeft="10dp" />
+        </RelativeLayout>
+
     </RelativeLayout>
     <FrameLayout
         android:layout_width="match_parent"

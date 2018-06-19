@@ -29,13 +29,18 @@
             android:textColor="#fff"
             android:layout_centerInParent="true" />
 
-        <ImageView
-            android:layout_width="12dp"
-            android:layout_height="21dp"
+        <RelativeLayout
             android:id="@+id/backBtn"
-            android:layout_centerVertical="true"
-            android:src="@drawable/back"
-            android:layout_marginLeft="10dp" />
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="21dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back"
+                android:layout_marginLeft="10dp" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <ScrollView
