@@ -169,7 +169,7 @@ public class GuoShuiActivity extends AppCompatActivity {
                 int past= ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
                 if ((visible + past) >= total && canPullUpRefresh){
                     canPullUpRefresh = false;
-                    OkHttpUtils.get().url(ConstList.domain + "/server/taxPrice/search")
+                    OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/taxPrice/search")
                             .addParams("lastId", listData.get(listData.size()-1).getTaxPriceId())
                             .addParams("keyWord",searchKey)
                             .build()
@@ -195,7 +195,7 @@ public class GuoShuiActivity extends AppCompatActivity {
             }
         });
 
-        OkHttpUtils.get().url(ConstList.domain+"/server/taxPrice/list")
+        OkHttpUtils.get().url(getString(R.string.baseUrl)+"/server/taxPrice/list")
                 .build()
                 .execute(new BeanCallBack<ServerBean<ArrayList<GSCXBean>>>() {
                     @Override
@@ -249,7 +249,7 @@ public class GuoShuiActivity extends AppCompatActivity {
 
     private void getRemoteData(String key, String index) {
         //TODO 添加属性
-        OkHttpUtils.get().url(ConstList.domain + "/server/taxPrice/search?")
+        OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/taxPrice/search?")
                 .addParams("lastId", index)
                 .addParams("keyWord",key)
                 .build()

@@ -177,7 +177,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
                     return;
                 }
                 isRefreshing = true;
-                OkHttpUtils.get().url(ConstList.domain + "/server/sunpan/search")
+                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                         .addParams("keyWord", searchET.getText().toString())
                         .build()
                         .execute(new StringCallback() {
@@ -265,7 +265,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                OkHttpUtils.get().url(ConstList.domain + "/server/sunpan/search")
+                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                         .addParams("keyWord", editable.toString())
                         .build()
                         .execute(new StringCallback() {
@@ -308,7 +308,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
 
     private void getRemoteData(final String index) {
         Log.e(TAG, "index " + index);
-        OkHttpUtils.get().url(ConstList.domain + "/server/sunpan/search")
+        OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                 .addParams("keyWord", searchET.getText().toString())
                 .addParams("lastId", index).build()
                 .execute(new StringCallback() {

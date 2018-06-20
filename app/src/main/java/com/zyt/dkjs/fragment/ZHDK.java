@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.zyt.HttpUtil.Bean.LoanTaxBean;
 import com.zyt.R;
 import com.zyt.dkjs.DKJSActivity;
-import com.zyt.dkjs.DKJSResult;
+import com.zyt.dkjs.DKJSResultActivity;
 import com.zyt.util.Util;
 
 import java.text.DecimalFormat;
@@ -87,7 +87,7 @@ public class ZHDK extends Fragment {
         b.putInt("gjjdkje",Integer.parseInt(gjjdkje.getText().toString()));
 
         Intent i = new Intent();
-        i.setClass((DKJSActivity)getActivity(), DKJSResult.class);
+        i.setClass((DKJSActivity)getActivity(), DKJSResultActivity.class);
         i.putExtra("data",b);
         getActivity().startActivity(i);
     }

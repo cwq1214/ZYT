@@ -51,7 +51,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"请输入新密码",Toast.LENGTH_SHORT).show();
                 }else {
                     if (password.getText().toString().equalsIgnoreCase(repeatPassword.getText().toString())){
-                        OkHttpUtils.post().url(ConstList.domain+"/server/user/initialization/resetpwd")
+                        OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/user/initialization/resetpwd")
                                 .addParams("userPhone",userPhoneNum)
                                 .addParams("passWord",password.getText().toString())
                                 .build()

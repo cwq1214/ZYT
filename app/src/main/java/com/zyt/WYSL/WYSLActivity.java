@@ -76,7 +76,7 @@ public class WYSLActivity extends AppCompatActivity {
                     if (Util.getUserID(WYSLActivity.this).equalsIgnoreCase("")) {
 
                     } else {
-                        OkHttpUtils.post().url(ConstList.domain + "/server/shulou/add")
+                        OkHttpUtils.post().url(getString(R.string.baseUrl) + "/server/shulou/add")
                                 .addParams("slName", lpmc.getText().toString())
                                 .addParams("slPrice", slje.getText().toString())
                                 .addParams("slArea", fwmj.getText().toString())

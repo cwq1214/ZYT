@@ -131,7 +131,7 @@ public class MySunpanActivity extends AppCompatActivity {
                     return;
                 }
                 isRefreshing = true;
-                OkHttpUtils.get().url(ConstList.domain + "/server/sunpan/search")
+                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                         .addParams("keyWord", searchET.getText().toString())
                         .addParams("userId",Util.getUserID(getBaseContext()))
                         .build()
@@ -220,7 +220,7 @@ public class MySunpanActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                OkHttpUtils.get().url(ConstList.domain + "/server/sunpan/search")
+                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                         .addParams("keyWord", editable.toString())
                         .addParams("userId", Util.getUserID(getBaseContext()))
                         .build()
@@ -264,7 +264,7 @@ public class MySunpanActivity extends AppCompatActivity {
 
     private void getRemoteData(final String index) {
         Log.e(TAG, "index " + index);
-        OkHttpUtils.get().url(ConstList.domain + "/server/sunpan/self")
+        OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/self")
                 .addParams("userId", Util.getUserID(getBaseContext()))
                 .addParams("lastId", index).build()
                 .execute(new StringCallback() {
@@ -336,7 +336,7 @@ public class MySunpanActivity extends AppCompatActivity {
 
     private void delMySunpan(final String sunpanId){
         Log.e(TAG,sunpanId);
-        OkHttpUtils.post().url(ConstList.domain+"/server/sunpan/delete").addParams("sunPanId",sunpanId).addParams("userId",Util.getUserID(getBaseContext())).build().execute(new StringCallback() {
+        OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/sunpan/delete").addParams("sunPanId",sunpanId).addParams("userId",Util.getUserID(getBaseContext())).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 Log.e(TAG,e.getMessage());

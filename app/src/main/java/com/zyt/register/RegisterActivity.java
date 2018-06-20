@@ -174,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void register(){
         OkHttpUtils.post()
-                .url(ConstList.domain+(String)RegisterActivity.this.getResources().getText(R.string.registerUrl))
+                .url(getString(R.string.baseUrl)+(String)RegisterActivity.this.getResources().getText(R.string.registerUrl))
                 .addParams("userPhone",userPhone.getText().toString())
                 .addParams("passWord",password.getText().toString())
                 .addParams("username",username.getText().toString())

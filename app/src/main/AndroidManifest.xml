@@ -90,10 +90,10 @@
             android:name=".dkjs.DKJSActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dkjs.DKJSResult"
+            android:name=".dkjs.DKJSResultActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dkjs.DEBJResultList"
+            android:name=".dkjs.DEBJResultListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".lxwm.LXWMActivity"

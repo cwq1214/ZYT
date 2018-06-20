@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.inject(this);
         userId = Util.getUserID(this);
 
-        OkHttpUtils.get().url(ConstList.domain + "/server/version/now")
+        OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/version/now")
                 .build()
                 .execute(new BeanCallBack<ServerBean<Map<String, String>>>() {
                     @Override
@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
 
-        OkHttpUtils.post().url(ConstList.domain + "/server/user/initialization/signOut").addParams("userId", userId).build().execute(new StringCallback() {
+        OkHttpUtils.post().url(getString(R.string.baseUrl) + "/server/user/initialization/signOut").addParams("userId", userId).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 Log.e(TAG, e.getMessage());

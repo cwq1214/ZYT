@@ -4,8 +4,8 @@
 
     <!--url-->
     <!--<string name="baseUrl">http://120.76.233.32:8500</string>-->
-    <!--<string name="baseUrl">http://119.23.66.37:8501</string>-->
-    <string name="baseUrl">http://192.168.3.16:8501</string>
+    <string name="baseUrl">http://119.23.66.37:8501</string>
+    <!--<string name="baseUrl">http://192.168.3.16:8501</string>-->
 
     <string name="registerUrl">/server/user/initialization/Registered</string>
     <string name="loginUrl">/server/user/initialization/Login</string>

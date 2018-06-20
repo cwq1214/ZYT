@@ -76,8 +76,9 @@ public class LXWMActivity extends AppCompatActivity {
     }
 
     private void getRemoteData() {
+
         //{"forUser": "", "forWorker": "", "version": "1.0", "data": {"iosImg": "http://120.76.233.32/iosImg.jpg", "androidImg": "http://120.76.233.32/androidImg.jpg"}, "ret": "success", "code": 200}
-        OkHttpUtils.get().url(ConstList.domain + "/server/about/").build().execute(new StringCallback() {
+        OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/about/").build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
 

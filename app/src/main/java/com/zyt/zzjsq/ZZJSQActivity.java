@@ -252,16 +252,39 @@ public class ZZJSQActivity extends AppCompatActivity {
         }
 
         double grsdsD = 0;
-        if (deltaDay > 1825) {//more than 1825 and only one house
-            if (isOnlyOneHouse.isChecked())
-                grsdsD = 0;
-            else
+
+        int selTab = tl1.getCurrentTab();
+        if (selTab==0){
+            if (deltaDay > 1825) {//more than 1825 and only one house
+                if (isOnlyOneHouse.isChecked())
+                    grsdsD = 0;
+                else
+                    grsdsD = (Float.parseFloat(xgszj.getText().toString()) - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
+            } else if (deltaDay <= 1825 && deltaDay > 730) {//less than 1825 more than 730
                 grsdsD = (Float.parseFloat(xgszj.getText().toString()) - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
-        } else if (deltaDay <= 1825 && deltaDay > 730) {//less than 1825 more than 730
-            grsdsD = (Float.parseFloat(xgszj.getText().toString()) - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
-        } else if (deltaDay <= 730) {//less than 730
-            grsdsD = (Float.parseFloat(xgszj.getText().toString()) / 1.05 - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
+            } else if (deltaDay <= 730) {//less than 730
+                grsdsD = (Float.parseFloat(xgszj.getText().toString()) / 1.05 - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
+            }
+        }else {
+            float percent = 0;
+            switch (selTab){
+                case 1:
+                    percent = 0.1f;
+                    break;
+                case 2:
+                    percent = 0.15f;
+                    break;
+                case 3:
+                    percent = 0.2f;
+                    break;
+                case 4:
+                    percent = 0.3f;
+                    break;
+            }
+            grsdsD = Float.parseFloat(xgszj.getText().toString())* percent;
         }
+
+
 
         qdD = qdD <= 0 ? 0 : qdD;
         zzsD = zzsD <= 0 ? 0 : zzsD;

@@ -143,7 +143,7 @@ public class ReleaseOrUpdateSunpanActivity extends AppCompatActivity {
 
         submit.setEnabled(false);
 
-        OkHttpUtils.post().url(ConstList.domain+"/server/sunpan/add")
+        OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/sunpan/add")
                 .addParams("spName",inputApartmentName.getText().toString())
                 .addParams("spPrice",inputPrice.getText().toString())
                 .addParams("spFloor",inputFloor.getText().toString())
@@ -191,7 +191,7 @@ public class ReleaseOrUpdateSunpanActivity extends AppCompatActivity {
             finish();
             return;
         }
-        OkHttpUtils.post().url(ConstList.domain+"/server/sunpan/update")
+        OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/sunpan/update")
                 .addParams("spName",inputApartmentName.getText().toString())
                 .addParams("spPrice",inputPrice.getText().toString())
                 .addParams("spFloor",inputFloor.getText().toString())

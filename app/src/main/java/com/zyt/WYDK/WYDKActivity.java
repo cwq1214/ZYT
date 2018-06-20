@@ -66,7 +66,7 @@ public class WYDKActivity extends AppCompatActivity {
                     if (Util.getUserID(WYDKActivity.this).equalsIgnoreCase("")) {
 
                     } else {
-                        OkHttpUtils.post().url(ConstList.domain + "/server/loan/add")
+                        OkHttpUtils.post().url(getString(R.string.baseUrl) + "/server/loan/add")
                                 .addParams("lName", lpmc.getText().toString())
                                 .addParams("lPrice", slje.getText().toString())
                                 .addParams("lArea", fwmj.getText().toString())

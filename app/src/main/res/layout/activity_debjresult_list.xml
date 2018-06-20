@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zyt.dkjs.DEBJResultList">
+    tools:context="com.zyt.dkjs.DEBJResultListActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,18 +21,23 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/textView50"
-            android:textSize="24dp"
+            android:textSize="17dp"
             android:textColor="#fff"
             android:layout_centerInParent="true"
             android:text="还款详情" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+
+        <RelativeLayout
             android:id="@+id/backBtn"
-            android:layout_centerVertical="true"
-            android:src="@drawable/back"
-            android:layout_marginLeft="10dp" />
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="21dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back"
+                android:layout_marginLeft="10dp" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
