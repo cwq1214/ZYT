@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="合赢融通"
+                android:text="房秘书"
                 android:textSize="17dp"
                 android:textColor="#fff"
                 android:layout_marginLeft="6dp" />
@@ -104,7 +104,7 @@
                 android:layout_height="88dp" />
             <TextView
                 style="@style/mainTabText"
-                android:text="商品计税器"
+                android:text="商铺计税器"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

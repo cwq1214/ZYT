@@ -14,7 +14,15 @@ public class Sunpan {
     String sunPanId;
     String spName;
     String spPrice;
+    String city;
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public String getSpPhone() {
         return spPhone;

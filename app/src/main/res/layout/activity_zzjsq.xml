@@ -41,7 +41,19 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/back"
                 android:layout_marginLeft="10dp" />
+
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/share"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textColor="#fff"
+            android:text="分享"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp" />
 
     </RelativeLayout>
 
@@ -83,17 +95,17 @@
                     android:layout_marginLeft="10dp" />
 
                 <EditText
+                    android:id="@+id/ygzj"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/ygzj"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:background="@null"
-                    android:layout_toRightOf="@+id/textView22"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="35dp"
+                    android:layout_toRightOf="@+id/textView22"
+                    android:background="@null"
+                    android:inputType="numberDecimal"
                     android:textAlignment="viewEnd"
-                    android:inputType="number"
                     android:textSize="16dp" />
 
                 <TextView
@@ -140,7 +152,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="35dp"
                     android:textAlignment="viewEnd"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textSize="16dp" />
 
                 <RelativeLayout
@@ -203,7 +215,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="35dp"
                     android:textAlignment="viewEnd"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textSize="16dp" />
 
                 <TextView
@@ -227,17 +239,17 @@
                 android:visibility="visible">
 
                 <TextView
+                    android:id="@+id/textView34"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="新过税总价"
-                    android:id="@+id/textView34"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="false"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="false"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="新成交总价"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#000"
-                    android:textSize="16dp"
-                    android:layout_marginLeft="10dp" />
+                    android:textSize="16dp" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -250,7 +262,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="35dp"
                     android:textAlignment="viewEnd"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textSize="16dp" />
 
                 <TextView
@@ -652,6 +664,13 @@
                     android:textSize="16dp"
                     android:layout_marginRight="10dp" />
             </RelativeLayout>
+
+            <TextView
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/declaration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 

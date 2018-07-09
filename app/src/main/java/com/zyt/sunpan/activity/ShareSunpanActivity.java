@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.hawk.Hawk;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -68,7 +69,8 @@ public class ShareSunpanActivity extends AppCompatActivity {
     TextView share;
     @InjectView(R.id.mySP)
     TextView mySp;
-
+    @InjectView(R.id.text_currentLocation)
+    TextView textCurrentLocation;
 
     boolean isOpenSearchInput = false;
 
@@ -104,6 +106,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         initView();
+        textCurrentLocation.setText(UserInfo.getUserLocation());
         weChartHelper = new WeChartHelper();
         weChartHelper.init(this, App.weiXin_AppId);
         weChartHelper.registerToWx();
@@ -179,6 +182,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
                 isRefreshing = true;
                 OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                         .addParams("keyWord", searchET.getText().toString())
+                        .addParams("city",UserInfo.getUserLocation())
                         .build()
                         .execute(new StringCallback() {
                             @Override
@@ -267,6 +271,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                         .addParams("keyWord", editable.toString())
+                        .addParams("city",UserInfo.getUserLocation())
                         .build()
                         .execute(new StringCallback() {
                             @Override
@@ -310,6 +315,7 @@ public class ShareSunpanActivity extends AppCompatActivity {
         Log.e(TAG, "index " + index);
         OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
                 .addParams("keyWord", searchET.getText().toString())
+                .addParams("city",UserInfo.getUserLocation())
                 .addParams("lastId", index).build()
                 .execute(new StringCallback() {
                     @Override

@@ -131,14 +131,14 @@ public class MySunpanActivity extends AppCompatActivity {
                     return;
                 }
                 isRefreshing = true;
-                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
+                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/self")
                         .addParams("keyWord", searchET.getText().toString())
                         .addParams("userId",Util.getUserID(getBaseContext()))
                         .build()
                         .execute(new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Log.e("bee", "error");
+                                Log.e("bee", e.getMessage());
                             }
 
                             @Override
@@ -220,7 +220,7 @@ public class MySunpanActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/search")
+                OkHttpUtils.get().url(getString(R.string.baseUrl) + "/server/sunpan/self")
                         .addParams("keyWord", editable.toString())
                         .addParams("userId", Util.getUserID(getBaseContext()))
                         .build()

@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
     private List<com.zyt.base.Banner> banners;
 
+    //市
+    String city;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,35 +170,34 @@ public class MainActivity extends AppCompatActivity {
         mLocationClient.registerLocationListener((BDLocation location)-> {
                 String addr = location.getAddrStr();    //获取详细地址信息
                 String country = location.getCountry();    //获取国家
-                String province = location.getProvince();    //获取省份
-                String city = location.getCity();    //获取城市
+            String province = location.getProvince();    //获取省份
+            city = location.getCity();    //获取城市
                 String district = location.getDistrict();    //获取区县
                 String street = location.getStreet();    //获取街道信息
                 if (city!=null) {
-                    if (city.endsWith("市")){
-
-                    }
-                    String cityName = city.substring(0,city.lastIndexOf("市"));
+                    if(city.contains("市"))
+                        city = city.substring(0,city.lastIndexOf("市"));
                     textCurrentLocation.setText(city);
+                    if (province.contains("省"))
+                        province = province.substring(0,province.lastIndexOf("省"));
                     getBanner();
-//                    if (!cityName.equals(Hawk.get("lc"))){
                         new AlertView.Builder().setContext(this)
                                 .setStyle(AlertView.Style.Alert)
                                 .setOnItemClickListener((Object o, int position)-> {
                                     if (position==-1){
                                         showSelLocationDialog();
                                     }else if (position==0){
-                                        setLocationText(cityName);
+                                        setLocationText(city);
+
                                     }
                                 })
                                 .setTitle("")
                                 .setCancelText("否")
                                 .setDestructive("是")
-                                .setMessage("系统已自动为你定位\n" +
-                                        "是否正确")
+                                .setMessage("系统定位到您在"+city+"，是否切换到定位位置？")
 
                                 .build().show();
-//                    }
+
                     mLocationClient.stop();
 
                 }
@@ -233,12 +235,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         String cityName = UserInfo.getUserLocation();
-        if (TextUtils.isEmpty(cityName)){
-            mLocationClient.start();
-        }else {
+        if (!TextUtils.isEmpty(cityName)){
             textCurrentLocation.setText(cityName);
             getBanner();
         }
+        mLocationClient.start();
+
 
 
     }
@@ -291,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
         OptionsPickerView pvOptions = new OptionsPickerBuilder(MainActivity.this, (options1, option2, options3, v) -> {
             //返回的分别是三个级别的选中位置
+
 
             String cityName =  options2Items.get(options1).get(option2).getPickerViewText();
             if (TextUtils.isEmpty(cityName)){

@@ -19,10 +19,17 @@ public class Province implements IPickerViewData{
         if (name!=null ){
             if (name.endsWith("市")){
                 name = name.substring(0,name.lastIndexOf("市"));
-            }
+            }else
             if (name.endsWith("特别行政区")){
                 name =  name.substring(0,name.lastIndexOf("特别行政区"));
+            }else
+            if (name.endsWith("省")){
+                name = name.substring(0,name.lastIndexOf("省"));
             }
+//            else
+//            if (name.endsWith("自治区")){
+//                name = name.substring(0,name.lastIndexOf("自治区"));
+//            }
         }
         return name;
     }

@@ -10,6 +10,8 @@ import com.baidu.mapapi.SDKInitializer;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zyt.util.LocationUtil;
 import com.zyt.util.WeChartHelper;
@@ -25,6 +27,7 @@ public class App extends Application {
     public static String weiXin_AppSecret = "632675351f1e51bf05d2079d4b68dd6d";
     public BMapManager bMapManager = null;
 
+
     
     
     
@@ -32,6 +35,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
         initEngineManager(this);
 
         SDKInitializer.initialize(getApplicationContext());
@@ -45,6 +49,11 @@ public class App extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter());
 
         LocationUtil.getInstance().init();
+
+        UMConfigure.init(this,"5b2c9837f43e4857e600000f"
+                ,"umeng", UMConfigure.DEVICE_TYPE_PHONE,"");
+
+        PlatformConfig.setWeixin(App.weiXin_AppId, App.weiXin_AppSecret);
 
 
     }

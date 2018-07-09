@@ -16,7 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SPJSQResult extends AppCompatActivity {
+@Deprecated
+public class SPJSQResultActivity extends AppCompatActivity {
 
     @InjectView(R.id.qs)
     TextView qs;
@@ -134,7 +135,7 @@ public class SPJSQResult extends AppCompatActivity {
 
     @Override
     public String toString() {
-        return "SPJSQResult{" +
+        return "SPJSQResultActivity{" +
                 "ygzj=" + ygzj +
                 ", yqsje=" + yqsje +
                 ", xgszj=" + xgszj +

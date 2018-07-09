@@ -1,4 +1,4 @@
-package com.zyt.welcomePage;
+package com.zyt.welcome;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +23,6 @@ import com.zyt.HttpUtil.Bean.ServerBean;
 import com.zyt.HttpUtil.BeanCallBack;
 import com.zyt.MainActivity;
 import com.zyt.R;
-import com.zyt.login.LoginActivity;
 import com.zyt.util.Util;
 
 import okhttp3.Call;
@@ -57,7 +56,7 @@ public class WelcomePageActivity extends AppCompatActivity {
         ImageView imageView = new ImageView(this);
 
         imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setImageDrawable(getResources().getDrawable(R.drawable.welcomepage1));
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.welcomepage2));
 
         setContentView(imageView);
 

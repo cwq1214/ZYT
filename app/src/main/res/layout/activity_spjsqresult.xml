@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zyt.spjsq.SPJSQResult">
+    tools:context="com.zyt.spjsq.SPJSQResultActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -77,19 +77,17 @@
                     android:layout_marginLeft="10dp" />
 
                 <TextView
+                    android:id="@+id/qs"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/qs"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:textSize="16dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/textView79"
+                    android:layout_toStartOf="@+id/textView79"
                     android:gravity="center_vertical"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#000"
-                    android:layout_marginRight="35dp"
-                    android:layout_toRightOf="@+id/textView19"
-                    android:layout_marginLeft="50dp"
-                    android:textAlignment="viewEnd" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"

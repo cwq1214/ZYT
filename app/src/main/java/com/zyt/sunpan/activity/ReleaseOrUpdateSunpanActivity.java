@@ -14,12 +14,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
+import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zyt.HttpUtil.Bean.ServerBean;
 import com.zyt.HttpUtil.BeanCallBack;
 import com.zyt.R;
 import com.zyt.sunpan.bean.Sunpan;
 import com.zyt.util.ConstList;
+import com.zyt.util.ToastUtils;
+import com.zyt.util.UserInfo;
 import com.zyt.util.Util;
 
 import butterknife.ButterKnife;
@@ -142,40 +147,52 @@ public class ReleaseOrUpdateSunpanActivity extends AppCompatActivity {
         setEditable(false);
 
         submit.setEnabled(false);
-
-        OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/sunpan/add")
-                .addParams("spName",inputApartmentName.getText().toString())
-                .addParams("spPrice",inputPrice.getText().toString())
-                .addParams("spFloor",inputFloor.getText().toString())
-                .addParams("spArea",inputArea.getText().toString())
-                .addParams("spUsername",inputContart.getText().toString())
-                .addParams("spPhone",inputTel.getText().toString())
-                .addParams("spBuildingNo",inputBuildingNo.getText().toString())
-                .addParams("spCompanyName",inputCompanyName.getText().toString())
-                .addParams("userId", Util.getUserID(ReleaseOrUpdateSunpanActivity.this))
-                .build().execute(new BeanCallBack<ServerBean<Object>>() {
+        new AlertView.Builder().setContext(this)
+                .setStyle(AlertView.Style.Alert).setTitle("提示").setMessage("房源城市为"+ UserInfo.getUserLocation()).setCancelText("否").setDestructive("是").setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                submit.setEnabled(true);
-                setEditable(true);
-                isComplete = false;
-            }
+            public void onItemClick(Object o, int position) {
 
-            @Override
-            public void onResponse(ServerBean<Object> response, int id) {
-                submit.setEnabled(true);
-                setEditable(true);
+                if (position == 0) {
+                    OkHttpUtils.post().url(getString(R.string.baseUrl) + "/server/sunpan/add")
+                            .addParams("spName", inputApartmentName.getText().toString())
+                            .addParams("spPrice", inputPrice.getText().toString())
+                            .addParams("spFloor", inputFloor.getText().toString())
+                            .addParams("spArea", inputArea.getText().toString())
+                            .addParams("spUsername", inputContart.getText().toString())
+                            .addParams("spPhone", inputTel.getText().toString())
+                            .addParams("spBuildingNo", inputBuildingNo.getText().toString())
+                            .addParams("spCompanyName", inputCompanyName.getText().toString())
+                            .addParams("userId", Util.getUserID(ReleaseOrUpdateSunpanActivity.this))
+                            .addParams("city",UserInfo.getUserLocation())
+                            .build().execute(new BeanCallBack<ServerBean<Object>>() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            submit.setEnabled(true);
+                            setEditable(true);
+                            isComplete = false;
+                        }
 
-                Log.e(TAG,response.toString());
+                        @Override
+                        public void onResponse(ServerBean<Object> response, int id) {
+                            submit.setEnabled(true);
+                            setEditable(true);
 
-                if (response.getRet().equalsIgnoreCase("success")){
-                    Toast.makeText(getApplicationContext(),"提交成功",Toast.LENGTH_SHORT).show();
-                    submit.setText("完成");
-                    isComplete = true;
-                    finish();
+                            Log.e(TAG, response.toString());
+
+                            if (response.getRet().equalsIgnoreCase("success")) {
+                                Toast.makeText(getApplicationContext(), "提交成功", Toast.LENGTH_SHORT).show();
+                                submit.setText("完成");
+                                isComplete = true;
+                                finish();
+                            }
+                        }
+                    });
+                }else {
+
                 }
             }
-        });
+            }).build().show();
+
     }
 
     private void submitUpdate(){
@@ -187,45 +204,51 @@ public class ReleaseOrUpdateSunpanActivity extends AppCompatActivity {
             makeToast("请填写平方价格");
             return;
         }
+        //不知道干嘛的
         if (isComplete){
             finish();
             return;
         }
-        OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/sunpan/update")
-                .addParams("spName",inputApartmentName.getText().toString())
-                .addParams("spPrice",inputPrice.getText().toString())
-                .addParams("spFloor",inputFloor.getText().toString())
-                .addParams("spArea",inputArea.getText().toString())
-                .addParams("spUsername",inputContart.getText().toString())
-                .addParams("spPhone",inputTel.getText().toString())
-                .addParams("spBuildingNo",inputBuildingNo.getText().toString())
-                .addParams("spCompanyName",inputCompanyName.getText().toString())
-                .addParams("userId", Util.getUserID(ReleaseOrUpdateSunpanActivity.this))
-                .addParams("sunPanId",sunpan.getSunPanId())
-                .build().execute(new BeanCallBack<ServerBean<Object>>() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                submit.setEnabled(true);
-                setEditable(true);
-                isComplete = false;
-            }
 
-            @Override
-            public void onResponse(ServerBean<Object> response, int id) {
-                submit.setEnabled(true);
-                setEditable(true);
+                    OkHttpUtils.post().url(getString(R.string.baseUrl)+"/server/sunpan/update")
+                            .addParams("spName",inputApartmentName.getText().toString())
+                            .addParams("spPrice",inputPrice.getText().toString())
+                            .addParams("spFloor",inputFloor.getText().toString())
+                            .addParams("spArea",inputArea.getText().toString())
+                            .addParams("spUsername",inputContart.getText().toString())
+                            .addParams("spPhone",inputTel.getText().toString())
+                            .addParams("spBuildingNo",inputBuildingNo.getText().toString())
+                            .addParams("spCompanyName",inputCompanyName.getText().toString())
+                            .addParams("userId", Util.getUserID(ReleaseOrUpdateSunpanActivity.this))
+                            .addParams("sunPanId",sunpan.getSunPanId())
+                            .addParams("city", sunpan.getCity())
+                            .build().execute(new BeanCallBack<ServerBean<Object>>() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            submit.setEnabled(true);
+                            setEditable(true);
+                            isComplete = false;
+                        }
 
-                Log.e(TAG,response.toString());
+                        @Override
+                        public void onResponse(ServerBean<Object> response, int id) {
+                            submit.setEnabled(true);
+                            setEditable(true);
 
-                if (response.getRet().equalsIgnoreCase("success")){
-                    Toast.makeText(getApplicationContext(),"修改成功",Toast.LENGTH_SHORT).show();
-                    submit.setText("完成");
-                    isComplete = true;
-                    finish();
-                }
-            }
-        });
+                            Log.e(TAG,response.toString());
+
+                            if (response.getRet().equalsIgnoreCase("success")){
+                                Toast.makeText(getApplicationContext(),"修改成功",Toast.LENGTH_SHORT).show();
+                                submit.setText("完成");
+                                isComplete = true;
+                                finish();
+                            }
+                        }
+                    });
+
     }
+
+
 
 
     public void setEditable(boolean enable){

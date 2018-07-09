@@ -7,6 +7,13 @@ import com.orhanobut.hawk.Hawk;
  */
 
 public class UserInfo {
+    public static void setProvince(String province){
+        Hawk.put("province",province);
+    }
+    public static String getProvince(){
+        return Hawk.get("province");
+    }
+
     public static void setUserLocation(String location){
         Hawk.put("lc",location);
     }

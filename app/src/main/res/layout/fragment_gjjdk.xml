@@ -103,7 +103,7 @@
                     android:layout_marginLeft="100dp"
                     android:layout_marginRight="35dp"
                     android:textAlignment="viewEnd"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textSize="16dp" />
 
                 <TextView
@@ -253,7 +253,7 @@
                     android:layout_marginLeft="100dp"
                     android:layout_marginRight="35dp"
                     android:textAlignment="viewEnd"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textSize="16dp" />
 
                 <TextView

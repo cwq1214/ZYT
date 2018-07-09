@@ -2,7 +2,6 @@ package com.zyt.clp;
 
 import android.content.Intent;
 import android.graphics.Rect;
-import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,13 +43,11 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.view.OptionsPickerView;
-import com.orhanobut.hawk.Hawk;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWHitBean;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWHouseBean;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWResultBean;
 import com.zyt.HttpUtil.BeanCallBack;
-import com.zyt.MainActivity;
 import com.zyt.R;
 import com.zyt.base.City;
 import com.zyt.base.Province;
@@ -92,7 +89,8 @@ public class CLPActivity extends AppCompatActivity {
     private List<Province> options1Items = new ArrayList<>();
     private List<List<City>> options2Items = new ArrayList<>();
 
-    String currentLocation;
+    String province;
+    String city;
     private String cityPy = "";
 
     GeoCoder mSearch;
@@ -101,6 +99,8 @@ public class CLPActivity extends AppCompatActivity {
     OptionsPickerView pvOptions;
 
     MapStatus currentMapStatus;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,13 +119,14 @@ public class CLPActivity extends AppCompatActivity {
 
         pvOptions = new OptionsPickerBuilder(this, (options1, option2, options3, v) -> {
             //返回的分别是三个级别的选中位置
+            province = options1Items.get(options1).getName();
 
-            currentLocation =  options2Items.get(options1).get(option2).getPickerViewText();
-            if (TextUtils.isEmpty(currentLocation)){
-                currentLocation =  options1Items.get(options1).getPickerViewText();
+            city =  options2Items.get(options1).get(option2).getPickerViewText();
+            if (TextUtils.isEmpty(city)){
+                city =  options1Items.get(options1).getPickerViewText();
             }
             searchET.setText("");
-            textCurrentLocation.setText(currentLocation);
+            textCurrentLocation.setText(city);
             mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
                 @Override
                 public void onGetGeoCodeResult(GeoCodeResult result) {
@@ -135,7 +136,7 @@ public class CLPActivity extends AppCompatActivity {
                     }
                     MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(result.getLocation());
                     bmapView.getMap().setMapStatus(update);
-                    cityPy= Util.getFirstSpell(currentLocation);
+                    cityPy= Util.getFirstSpell(city);
                     onMoveSearch(bmapView.getMap().getMapStatus());
 
                     //获取地理编码结果
@@ -151,7 +152,7 @@ public class CLPActivity extends AppCompatActivity {
                 }
             });
             mSearch.geocode(new GeoCodeOption()
-                    .city(currentLocation).address("政府"));
+                    .city(city).address("政府"));
 
 
         }).build();
@@ -167,10 +168,10 @@ public class CLPActivity extends AppCompatActivity {
 
         mSearch = GeoCoder.newInstance();
 
-        currentLocation = UserInfo.getUserLocation();
-        if (currentLocation!=null){
-            textCurrentLocation.setText(currentLocation);
-            cityPy = Util.getFirstSpell(currentLocation);
+        city = UserInfo.getUserLocation();
+        if (city !=null){
+            textCurrentLocation.setText(city);
+            cityPy = Util.getFirstSpell(city);
 
             mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
                 @Override
@@ -201,7 +202,7 @@ public class CLPActivity extends AppCompatActivity {
                 }
             });
             mSearch.geocode(new GeoCodeOption()
-                    .city(currentLocation).address("人民政府"));
+                    .city(city).address("人民政府"));
         }else {
             mLocationClient.start();
         }
@@ -239,7 +240,10 @@ public class CLPActivity extends AppCompatActivity {
             if (cityPy.length() == 0) {
                 Toast.makeText(getApplicationContext(), "获取城市中...", Toast.LENGTH_SHORT).show();
             } else {
-                OkHttpUtils.get().url("http://esf." + cityPy + ".fang.com/map/?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=" + searchET.getText().toString() + "&comarea=&orderby=30&isyouhui=&newCode=&houseNum=&schoolDist=&schoolid=&ecshop=&PageNo=1&zoom=18&a=ajaxSearch&city=" + cityPy + "&searchtype=")
+
+                String  url = getUrl(province,city)+"?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=" + searchET.getText().toString() + "&comarea=&orderby=30&isyouhui=&newCode=&houseNum=&schoolDist=&schoolid=&ecshop=&PageNo=1&zoom=18&a=ajaxSearch&city=" + cityPy + "&searchtype=";
+                com.orhanobut.logger.Logger.d(url);
+                OkHttpUtils.get().url(url)
                         .build()
                         .execute(new BeanCallBack<SFWResultBean<SFWHitBean<SFWHouseBean>>>() {
                             @Override
@@ -333,7 +337,8 @@ public class CLPActivity extends AppCompatActivity {
     }
 
     public void onMoveSearch(MapStatus mapStatus){
-        String url = "http://esf." + cityPy + ".fang.com/map/?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=&comarea=&orderby=&isyouhui=&x1=" + mapStatus.bound.southwest.longitude + "&y1=" + mapStatus.bound.southwest.latitude + "&x2=" + mapStatus.bound.northeast.longitude + "&y2=" + mapStatus.bound.northeast.latitude + "&newCode=&houseNum=&schoolDist=&schoolid=&PageNo=1&zoom=18&a=ajaxSearch&searchtype=";
+        String url = getUrl(province,city)+"?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=&comarea=&orderby=&isyouhui=&x1=" + mapStatus.bound.southwest.longitude + "&y1=" + mapStatus.bound.southwest.latitude + "&x2=" + mapStatus.bound.northeast.longitude + "&y2=" + mapStatus.bound.northeast.latitude + "&newCode=&houseNum=&schoolDist=&schoolid=&PageNo=1&zoom=18&a=ajaxSearch&searchtype=";
+        com.orhanobut.logger.Logger.d(url);
         OkHttpUtils.post()
                 .url(url)
                 .build()
@@ -606,5 +611,46 @@ public class CLPActivity extends AppCompatActivity {
             if (parent.getChildPosition(view) != 0)
                 outRect.top = space;
         }
+    }
+
+    private String getUrl(String province,String city){
+        String url;
+
+        String cityPy = Util.getFirstSpell(city);
+
+        if (cityPy.equals("北京")){
+            url  = "http://esf.fang.com/map/";
+        }else if (city.equals("呼和浩特")){
+            url = "http://esf.nm.fang.com/map/";
+        }else if (city.equals("重庆")){
+            url  = "http://esf.cq.fang.com/map/";
+        }else if (city.equals("太原")){
+            url  = "http://esf.taiyuan.fang.com/map/";
+        }else if (city.equals("长春")){
+            url  = "http://esf.changchun.fang.com/map/";
+        }else if (city.equals("哈尔滨")){
+            url  = "http://esf.hrb.fang.com/map/";
+        }else if (city.equals("长沙")){
+            url  = "http://esf.cs.fang.com/map/";
+        }else if (city.equals("海口")){
+            url  = "http://esf.hn.fang.com/map/";
+        }else if (city.equals("三亚")){
+            url  = "http://esf.sanya.fang.com/map/";
+        }else if (city.equals("拉萨")){
+            url  = "http://esf.lasa.fang.com/map/";
+        }else if (city.equals("西安")){
+            url  = "http://esf.xian.fang.com/map/";
+        }else if (city.equals("银川")){
+            url  = "http://esf.yinchuan.fang.com/map/";
+        }else if (city.equals("乌鲁木齐")){
+            url  = "http://esf.xj.fang.com/map/";
+        }else if (city.equals("厦门")){
+            url =  "http://esf.xm.fang.com/map/";
+        }
+        else {
+            url  = "http://esf." + cityPy + ".fang.com/map/";
+
+        }
+        return url;
     }
 }

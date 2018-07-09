@@ -1,20 +1,30 @@
 package com.zyt.zzjsq;
 
 import android.app.DatePickerDialog;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
+import com.orhanobut.logger.Logger;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.zyt.R;
 import com.zyt.base.TabEntity;
+import com.zyt.util.ToastUtils;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -24,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +76,7 @@ public class ZZJSQActivity extends AppCompatActivity {
     SegmentTabLayout tl1;
 
 
+
     private int selectYear;
     private int selectMonth;
     private int selectDay;
@@ -85,11 +97,11 @@ public class ZZJSQActivity extends AppCompatActivity {
         Date mydate = new Date(); //获取当前日期Date对象
         mycalendar.setTime(mydate);
         selectYear = mycalendar.get(Calendar.YEAR);
-        selectMonth = mycalendar.get(Calendar.MONTH);
+        selectMonth = mycalendar.get(Calendar.MONTH)+1;
         selectDay = mycalendar.get(Calendar.DAY_OF_MONTH);
 
         nowYear = mycalendar.get(Calendar.YEAR);
-        nowMonth = mycalendar.get(Calendar.MONTH);
+        nowMonth = mycalendar.get(Calendar.MONTH)+1;
         nowDay = mycalendar.get(Calendar.DAY_OF_MONTH);
 
 
@@ -99,6 +111,61 @@ public class ZZJSQActivity extends AppCompatActivity {
         }
         tl1.setTabData(mTitles);
     }
+    @OnClick(R.id.share)
+    public void onShareClick(){
+
+
+        if (TextUtils.isEmpty(hj.getText())){
+            ToastUtils.showShort(this,"请先计算");
+            return;
+        }
+
+
+
+
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("ygj="+ygzj.getText().toString());
+        sb.append("&area="+fwmj.getText().toString());
+        sb.append("&yqs="+yqsje.getText().toString());
+        sb.append("&xcj="+xgszj.getText().toString());
+        sb.append("&yqst="+yqssj.getText().toString());
+        sb.append("&unique="+(isOnlyOneHouse.isChecked()?"1":"0"));
+        sb.append("&qs="+qs.getText().toString());
+        sb.append("&zzs="+zzs.getText().toString());
+        sb.append("&fjs="+fjs.getText().toString());
+        sb.append("&gr="+grsds.getText().toString());
+        sb.append("&hj="+hj.getText().toString());
+
+        sb.append("&way="+(tl1.getCurrentTab()+1));
+//        String house = "" ;
+//        switch (buyKind){
+//            case 0:
+//                house=buyFirst.getText().toString();
+//                break;
+//            case 1:
+//                house = buySecond.getText().toString();
+//                break;
+//            case 2:
+//                house = buyMany.getText().toString();
+//                break;
+//        }
+        sb.append("&hourse="+(buyKind+1));
+
+        String title ="房秘书";
+        String content = "住宅计税器计算结果";
+        String url = getString(R.string.baseUrl)+"/server/web/zhuzhai?"+sb.toString();
+
+
+
+        UMWeb web = new UMWeb(url);
+        web.setTitle(title);//标题
+        web.setThumb(new UMImage(this,R.drawable.logo3));  //缩略图
+        web.setDescription(content);//描述
+        new ShareAction(this).withMedia(web).setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.WEIXIN_FAVORITE).open();
+
+    }
+
 
     @OnClick({R.id.backBtn, R.id.yqssj, R.id.buyFirst, R.id.buySecond, R.id.buyMany, R.id.caculateBtn, R.id.resetBtn})
     public void onClick(View view) {
@@ -165,11 +232,16 @@ public class ZZJSQActivity extends AppCompatActivity {
                 if (ygzj.getText().length() == 0 || fwmj.getText().length() == 0 || yqsje.getText().length() == 0 || xgszj.getText().length() == 0) {
                     Toast.makeText(getApplicationContext(), "请填写完整信息", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!isNumeric(ygzj.getText().toString()) || !isNumeric(fwmj.getText().toString()) || !isNumeric(yqsje.getText().toString()) || !isNumeric(xgszj.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "信息格式错误", Toast.LENGTH_SHORT).show();
-                    } else {
+//                    if (!isNumeric(ygzj.getText().toString()) || !isNumeric(fwmj.getText().toString()) || !isNumeric(yqsje.getText().toString()) || !isNumeric(xgszj.getText().toString())) {
+//                        Toast.makeText(getApplicationContext(), "信息格式错误", Toast.LENGTH_SHORT).show();
+//                    } else {
+
+
                         caculateData();
-                    }
+
+                        InputMethodManager methodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        methodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+//                    }
                 }
                 break;
             case R.id.resetBtn:
@@ -200,103 +272,97 @@ public class ZZJSQActivity extends AppCompatActivity {
 
     private void caculateData() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long deltaDay = 0;
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        long difYear = 0;//今日年份 - 原契税日期年份
+        long difMonth = 0;//今日月份 - 原契税日期月份
+
+
+        double ygzj = Double.valueOf(this.ygzj.getText().toString());//原购总价
+        double xgszj = Double.valueOf(this.xgszj.getText().toString());//新过税总价
+        double yqsje = Double.valueOf(this.yqsje.getText().toString());//原契税金额
+        double fwmj = Double.valueOf(this.fwmj.getText().toString());//房屋面积
+
+        boolean isUnique=isOnlyOneHouse.isChecked();//唯一住房
+        double qsD;//契税
+        double zzsD;//增值税
+        double grsdsD = 0;//个人所得税
+
+        int grsdsType = tl1.getCurrentTab();
+        int buyType = buyKind;
+        double buyType_percent = 0;
+        double grsds_percent = 0;//征收方式
+        double fjsD;//附加税
+        double hjD_buy;//买合计
+        double hjD_sell;//麦合计
+
+
         try {
             Date nowDate = sdf.parse(nowYear + "-" + nowMonth + "-" + nowDay + " 00:00:00");
-            Date selectDate = sdf.parse(selectYear + "-" + selectMonth + "-" + selectDay + " 00:00:00");
-            deltaDay = (nowDate.getTime() - selectDate.getTime()) / (24 * 60 * 60 * 1000);
+            Date selectDate = sdf.parse(selectYear + "-" + (selectMonth+1) + "-" + selectDay + " 00:00:00");
+            difMonth = nowDate.getMonth() - selectDate.getMonth() ;
+            difYear = nowDate.getYear() - selectDate.getYear() ;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        DecimalFormat df = new DecimalFormat("0.00");
-
-        double qdD;
-        double zzsD;
-        if (deltaDay <= 730) {
-            if (buyKind == 0) {
-                if (Float.parseFloat(fwmj.getText().toString()) <= 90) {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0.01;
-                } else {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0.015;
-                }
-            } else if (buyKind == 1) {
-                if (Float.parseFloat(fwmj.getText().toString()) <= 90) {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0.01;
-                } else {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0.02;
-                }
-            } else {
-                qdD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0.03;
-            }
-
-            zzsD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0.05;
-        } else {
-            if (buyKind == 0) {
-                if (Float.parseFloat(fwmj.getText().toString()) <= 90) {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) * 0.01;
-                } else {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) * 0.015;
-                }
-            } else if (buyKind == 1) {
-                if (Float.parseFloat(fwmj.getText().toString()) <= 90) {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) * 0.01;
-                } else {
-                    qdD = Float.parseFloat(xgszj.getText().toString()) * 0.02;
-                }
-            } else {
-                qdD = Float.parseFloat(xgszj.getText().toString()) * 0.03;
-            }
-
-            zzsD = Float.parseFloat(xgszj.getText().toString()) / 1.05 * 0;
-        }
-
-        double grsdsD = 0;
-
-        int selTab = tl1.getCurrentTab();
-        if (selTab==0){
-            if (deltaDay > 1825) {//more than 1825 and only one house
-                if (isOnlyOneHouse.isChecked())
-                    grsdsD = 0;
-                else
-                    grsdsD = (Float.parseFloat(xgszj.getText().toString()) - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
-            } else if (deltaDay <= 1825 && deltaDay > 730) {//less than 1825 more than 730
-                grsdsD = (Float.parseFloat(xgszj.getText().toString()) - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
-            } else if (deltaDay <= 730) {//less than 730
-                grsdsD = (Float.parseFloat(xgszj.getText().toString()) / 1.05 - Float.parseFloat(ygzj.getText().toString()) - Float.parseFloat(yqsje.getText().toString())) * 0.2;
-            }
+        if (difYear + difMonth*0.1 >=2){ //免增值税税
+            zzsD = 0;
         }else {
-            float percent = 0;
-            switch (selTab){
-                case 1:
-                    percent = 0.1f;
-                    break;
-                case 2:
-                    percent = 0.15f;
-                    break;
-                case 3:
-                    percent = 0.2f;
-                    break;
-                case 4:
-                    percent = 0.3f;
-                    break;
-            }
-            grsdsD = Float.parseFloat(xgszj.getText().toString())* percent;
+            zzsD = xgszj * 0.05;
         }
-
-
-
-        qdD = qdD <= 0 ? 0 : qdD;
-        zzsD = zzsD <= 0 ? 0 : zzsD;
-        grsdsD = grsdsD <= 0 ? 0 : grsdsD;
-
-        double fjsD;
         fjsD = zzsD * 0.12;
 
-        qs.setText(df.format(qdD));
+        if (difYear + difMonth * 0.1 >=5  && isUnique){
+            grsdsD = 0;
+        }else {
+            if (grsdsType == 0){//（新成交总价-原购总价-原契税-附加税）×20%
+                grsdsD = ( xgszj - ygzj - yqsje - fjsD ) * 0.2;
+            }else {
+                switch (grsdsType){
+                    case 1:
+                        grsds_percent = 0.01;
+                        break;
+                    case 2:
+                        grsds_percent = 0.015;
+                        break;
+                    case 3:
+                        grsds_percent = 0.02;
+                        break;
+                    case 4:
+                        grsds_percent = 0.03;
+                        break;
+                }
+                grsdsD = grsds_percent * xgszj;
+            }
+        }
+
+
+        hjD_sell = zzsD + fjsD + grsdsD;
+
+        if (buyType==0){
+            if (fwmj>=90){
+                buyType_percent = 0.015;
+            }else {
+                buyType_percent = 0.01;
+            }
+        }else if (buyType == 1){
+            buyType_percent = 0.02;
+        }else if (buyType == 2){
+            buyType_percent = 0.03;
+        }
+        hjD_buy = xgszj * buyType_percent;
+
+
+        hjD_buy = hjD_buy > 0?hjD_buy:0;
+        zzsD = zzsD>0?zzsD:0;
+        grsdsD = grsdsD >0 ? grsdsD:0;
+        hjD_sell = hjD_sell>0?hjD_sell:0;
+        fjsD = fjsD>0?fjsD:0;
+
+        qs.setText(df.format(hjD_buy));
         zzs.setText(df.format(zzsD));
         grsds.setText(df.format(grsdsD));
-        hj.setText(df.format(qdD + zzsD + grsdsD));
+        hj.setText(df.format(hjD_buy + hjD_sell));
         fjs.setText(df.format(fjsD));
     }
 
