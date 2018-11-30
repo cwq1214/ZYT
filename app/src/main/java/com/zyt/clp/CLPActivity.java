@@ -43,6 +43,8 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWHitBean;
 import com.zyt.HttpUtil.Bean.SFWBean.SFWHouseBean;
@@ -50,11 +52,14 @@ import com.zyt.HttpUtil.Bean.SFWBean.SFWResultBean;
 import com.zyt.HttpUtil.BeanCallBack;
 import com.zyt.R;
 import com.zyt.base.City;
+import com.zyt.base.FTXCity;
 import com.zyt.base.Province;
 import com.zyt.util.LocationUtil;
 import com.zyt.util.UserInfo;
 import com.zyt.util.Util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,8 +91,8 @@ public class CLPActivity extends AppCompatActivity {
     private PersonAdapter personAdapter;
 
 
-    private List<Province> options1Items = new ArrayList<>();
-    private List<List<City>> options2Items = new ArrayList<>();
+    private List<FTXCity> options1Items = new ArrayList<>();
+    private List<List<FTXCity>> options2Items = new ArrayList<>();
 
     String province;
     String city;
@@ -110,8 +115,20 @@ public class CLPActivity extends AppCompatActivity {
 
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(myListener);
+        try {
+            InputStream is = getAssets().open("cityList.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String text = new String(buffer, "utf-8");
+            List<FTXCity> cities = new Gson().fromJson(text,new TypeToken<List<FTXCity>>(){}.getType());
+            options1Items = cities;
 
-        options1Items = LocationUtil.getInstance().getProvinces();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         for (int i=0;i<options1Items.size();i++){
             options2Items.add(options1Items.get(i).getCities());
@@ -119,11 +136,11 @@ public class CLPActivity extends AppCompatActivity {
 
         pvOptions = new OptionsPickerBuilder(this, (options1, option2, options3, v) -> {
             //返回的分别是三个级别的选中位置
-            province = options1Items.get(options1).getName();
+            province = options1Items.get(options1).getN();
 
-            city =  options2Items.get(options1).get(option2).getPickerViewText();
+            city =  options2Items.get(options1).get(option2).getN();
             if (TextUtils.isEmpty(city)){
-                city =  options1Items.get(options1).getPickerViewText();
+                city =  options1Items.get(options1).getN();
             }
             searchET.setText("");
             textCurrentLocation.setText(city);
@@ -136,7 +153,7 @@ public class CLPActivity extends AppCompatActivity {
                     }
                     MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(result.getLocation());
                     bmapView.getMap().setMapStatus(update);
-                    cityPy= Util.getFirstSpell(city);
+                    cityPy= options2Items.get(options1).get(option2).getPy();
                     onMoveSearch(bmapView.getMap().getMapStatus());
 
                     //获取地理编码结果
@@ -241,7 +258,7 @@ public class CLPActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "获取城市中...", Toast.LENGTH_SHORT).show();
             } else {
 
-                String  url = getUrl(province,city)+"?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=" + searchET.getText().toString() + "&comarea=&orderby=30&isyouhui=&newCode=&houseNum=&schoolDist=&schoolid=&ecshop=&PageNo=1&zoom=18&a=ajaxSearch&city=" + cityPy + "&searchtype=";
+                String  url = getUrl(cityPy)+"?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=" + searchET.getText().toString() + "&comarea=&orderby=30&isyouhui=&newCode=&houseNum=&schoolDist=&schoolid=&ecshop=&PageNo=1&zoom=18&a=ajaxSearch&city=" + cityPy + "&searchtype=";
                 com.orhanobut.logger.Logger.d(url);
                 OkHttpUtils.get().url(url)
                         .build()
@@ -337,7 +354,7 @@ public class CLPActivity extends AppCompatActivity {
     }
 
     public void onMoveSearch(MapStatus mapStatus){
-        String url = getUrl(province,city)+"?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=&comarea=&orderby=&isyouhui=&x1=" + mapStatus.bound.southwest.longitude + "&y1=" + mapStatus.bound.southwest.latitude + "&x2=" + mapStatus.bound.northeast.longitude + "&y2=" + mapStatus.bound.northeast.latitude + "&newCode=&houseNum=&schoolDist=&schoolid=&PageNo=1&zoom=18&a=ajaxSearch&searchtype=";
+        String url = getUrl(cityPy)+"?mapmode=&district=&subwayline=&subwaystation=&price=&room=&area=&towards=&floor=&hage=&equipment=&keyword=&comarea=&orderby=&isyouhui=&x1=" + mapStatus.bound.southwest.longitude + "&y1=" + mapStatus.bound.southwest.latitude + "&x2=" + mapStatus.bound.northeast.longitude + "&y2=" + mapStatus.bound.northeast.latitude + "&newCode=&houseNum=&schoolDist=&schoolid=&PageNo=1&zoom=18&a=ajaxSearch&searchtype=";
         com.orhanobut.logger.Logger.d(url);
         OkHttpUtils.post()
                 .url(url)
@@ -449,7 +466,20 @@ public class CLPActivity extends AppCompatActivity {
                 cityName = cityName.substring(0, cityName.length() - 1);
             }
             cityPy = Util.getFirstSpell(cityName);
-            Log.e("bee", cityPy);
+
+            for (int i=0;i<options1Items.size();i++){
+                if (bdLocation.getProvince().contains(options1Items.get(i).getN())){
+                    for (int j=0;j<options1Items.get(i).getCities().size();j++){
+                        if (cityName.contains(options1Items.get(i).getCities().get(j).getN())){
+                            cityPy = options1Items.get(i).getCities().get(j).getPy();
+                            break;
+                        }
+
+                    }
+                    break;
+                }
+            }
+
             bmapView.getMap().setMyLocationEnabled(true);
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(bdLocation.getRadius())
@@ -613,6 +643,15 @@ public class CLPActivity extends AppCompatActivity {
         }
     }
 
+    private String getUrl(String cityPy){
+        if (TextUtils.isEmpty(cityPy)){
+            return "http://esf.fang.com/map/";
+        }else {
+            return "http://esf." + cityPy + ".fang.com/map/";
+        }
+    }
+
+    @Deprecated
     private String getUrl(String province,String city){
         String url;
 
