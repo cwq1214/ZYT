@@ -13,7 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zhy.http.okhttp.OkHttpUtils;
 import com.zyt.HttpUtil.Bean.LoanTaxBean;
+import com.zyt.HttpUtil.Bean.ServerBean;
+import com.zyt.HttpUtil.BeanCallBack;
 import com.zyt.R;
 import com.zyt.dkjs.DKJSActivity;
 import com.zyt.dkjs.DKJSResultActivity;
@@ -24,6 +27,7 @@ import java.text.DecimalFormat;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +54,7 @@ public class ZHDK extends Fragment {
     private String gjjdkllStr;
 
     private boolean isDEBX = true;
+    private LoanTaxBean mBean;
 
     public ZHDK() {
         // Required empty public constructor
@@ -117,26 +122,26 @@ public class ZHDK extends Fragment {
                     if (!Util.isNumeric(dkqx.getText().toString())){
                         Toast.makeText(getActivity().getApplicationContext(),"贷款期限格式错误",Toast.LENGTH_SHORT).show();
                     }else {
-                        LoanTaxBean bean = ((DKJSActivity) getActivity()).getLoanTaxBean();
-                        if (bean == null){
+                        mBean = ((DKJSActivity) getActivity()).getLoanTaxBean();
+                        if (mBean == null){
                             Toast.makeText(getActivity().getApplicationContext(),"利率获取中,请稍等",Toast.LENGTH_SHORT).show();
+                            OkHttpUtils.get().url((String) this.getResources().getText(R.string.baseUrl) + (String) this.getResources().getText(R.string.loanTax))
+                                    .build()
+                                    .execute(new BeanCallBack<ServerBean<LoanTaxBean>>() {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(ServerBean<LoanTaxBean> response, int id) {
+                                            Log.e("bee", response.toString());
+                                            mBean = response.getData();
+                                            calculationS();
+                                        }
+                                    });
                         }else{
-                            float lll;
-                            if (Integer.parseInt(dkqx.getText().toString())<=1){
-                                lll = Float.parseFloat(bean.getBusiness().get("1"));
-                            }else if (Integer.parseInt(dkqx.getText().toString())<=5){
-                                lll = Float.parseFloat(bean.getBusiness().get("2"));
-                            }else{
-                                lll = Float.parseFloat(bean.getBusiness().get("3"));
-                            }
-                            ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
-                                @Override
-                                public void selectItem(float value) {
-                                    DecimalFormat df  = new DecimalFormat("0.00");
-                                    sydkllStr = df.format(value);
-                                    sydkll.setText(sydkllStr);
-                                }
-                            });
+                            calculationS();
                         }
                     }
                 }
@@ -148,24 +153,26 @@ public class ZHDK extends Fragment {
                     if (!Util.isNumeric(dkqx.getText().toString())){
                         Toast.makeText(getActivity().getApplicationContext(),"贷款期限格式错误",Toast.LENGTH_SHORT).show();
                     }else {
-                        LoanTaxBean bean = ((DKJSActivity) getActivity()).getLoanTaxBean();
-                        if (bean == null){
+                        mBean = ((DKJSActivity) getActivity()).getLoanTaxBean();
+                        if (mBean == null){
                             Toast.makeText(getActivity().getApplicationContext(),"利率获取中,请稍等",Toast.LENGTH_SHORT).show();
+                            OkHttpUtils.get().url((String) this.getResources().getText(R.string.baseUrl) + (String) this.getResources().getText(R.string.loanTax))
+                                    .build()
+                                    .execute(new BeanCallBack<ServerBean<LoanTaxBean>>() {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(ServerBean<LoanTaxBean> response, int id) {
+                                            Log.e("bee", response.toString());
+                                            mBean = response.getData();
+                                            calculationG();
+                                        }
+                                    });
                         }else{
-                            float lll;
-                            if (Integer.parseInt(dkqx.getText().toString())<=5){
-                                lll = Float.parseFloat(bean.getGjj().get("1"));
-                            }else{
-                                lll = Float.parseFloat(bean.getGjj().get("2"));
-                            }
-                            ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
-                                @Override
-                                public void selectItem(float value) {
-                                    DecimalFormat df  = new DecimalFormat("0.00");
-                                    gjjdkllStr = df.format(value);
-                                    gjjdkll.setText(gjjdkllStr+"%");
-                                }
-                            });
+                            calculationG();
                         }
                     }
                 }
@@ -191,5 +198,41 @@ public class ZHDK extends Fragment {
                 debxBtn.setTextColor(Color.BLACK);
                 break;
         }
+    }
+
+    private void calculationS(){
+        float lll;
+        if (Integer.parseInt(dkqx.getText().toString())<=1){
+            lll = Float.parseFloat(mBean.getBusiness().get("1"));
+        }else if (Integer.parseInt(dkqx.getText().toString())<=5){
+            lll = Float.parseFloat(mBean.getBusiness().get("2"));
+        }else{
+            lll = Float.parseFloat(mBean.getBusiness().get("3"));
+        }
+        ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
+            @Override
+            public void selectItem(float value) {
+                DecimalFormat df  = new DecimalFormat("0.00");
+                sydkllStr = df.format(value);
+                sydkll.setText(sydkllStr);
+            }
+        });
+    }
+
+    private void calculationG(){
+        float lll;
+        if (Integer.parseInt(dkqx.getText().toString())<=5){
+            lll = Float.parseFloat(mBean.getGjj().get("1"));
+        }else{
+            lll = Float.parseFloat(mBean.getGjj().get("2"));
+        }
+        ((DKJSActivity) getActivity()).selectLL(lll,new DKJSActivity.SelectLLCallBack() {
+            @Override
+            public void selectItem(float value) {
+                DecimalFormat df  = new DecimalFormat("0.00");
+                gjjdkllStr = df.format(value);
+                gjjdkll.setText(gjjdkllStr+"");
+            }
+        });
     }
 }

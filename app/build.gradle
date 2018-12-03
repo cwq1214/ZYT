@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'ZYT'
             keyPassword '123456'
-            storeFile file('ZYT.jks')
+            storeFile file('../ZYT.jks')
             storePassword '123456'
         }
     }
